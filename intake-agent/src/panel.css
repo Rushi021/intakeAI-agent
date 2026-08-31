@@ -1,0 +1,41 @@
+:root { color-scheme: light dark; font: 13px/1.55 ui-sans-serif, system-ui, sans-serif; }
+body { margin: 0; }
+main { padding: 14px; }
+h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; opacity: .6; margin: 0 0 8px; }
+section { margin-bottom: 22px; }
+.muted { opacity: .7; }
+.center { text-align: center; }
+.hidden { display: none; }
+
+.tabs { display: flex; border-bottom: 1px solid color-mix(in srgb, currentColor 18%, transparent); }
+.tabs button { flex: 1; font: inherit; padding: 9px; background: none; border: 0; border-bottom: 2px solid transparent;
+               color: inherit; opacity: .55; cursor: pointer; }
+.tabs button.on { opacity: 1; font-weight: 600; border-bottom-color: currentColor; }
+
+.drop { display: block; padding: 22px 14px; margin-bottom: 10px; text-align: center; cursor: pointer;
+        border: 1px dashed color-mix(in srgb, currentColor 35%, transparent); border-radius: 8px; }
+.drop input { display: none; }
+
+button { font: inherit; padding: 5px 11px; margin-right: 6px; }
+.primary { margin: 14px 0 0; padding: 9px 26px; font-weight: 600; border-radius: 6px; }
+.primary:disabled { opacity: .4; }
+
+.counts { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 0 0 10px; }
+.counts dt { opacity: .6; }
+.counts dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+details { border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent); padding: 8px 0; }
+summary { cursor: pointer; font-weight: 600; }
+details details { margin-left: 12px; font-weight: 400; }
+details details summary { font-weight: 400; }
+
+pre { font: 11px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 8px 0 0; padding: 8px;
+      background: color-mix(in srgb, currentColor 6%, transparent); border-radius: 4px;
+      max-height: 320px; overflow: auto; white-space: pre; }
+.tools { margin-top: 8px; }
+.tools input[type=number] { width: 64px; font: inherit; }
+.stale { color: #c2410c; font-weight: 600; }
+
+.model { display: grid; gap: 8px; }
+.model label { display: grid; gap: 3px; opacity: .8; }
+.model select, .model input { font: inherit; padding: 4px; width: 100%; box-sizing: border-box; }

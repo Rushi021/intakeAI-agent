@@ -1,0 +1,10 @@
+node_modules/
+dist/
+
+# Never commit a key. There is no supported path that reads one from here —
+# the extension stores it in chrome.storage.local — but if one is ever added
+# by hand, it does not leave this machine.
+.env
+.env.*
+!.env.example
+*.key

@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Intake Study Builder Agent",
+  "version": "0.1.0",
+  "description": "Perceives an eSource platform through its accessibility tree and plans a study build from an IR file.",
+  "permissions": [
+    "debugger",
+    "sidePanel",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "sw.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Intake Agent"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "host_permissions": [
+    "https://api.mistral.ai/*"
+  ]
+}

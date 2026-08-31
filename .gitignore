@@ -1,0 +1,9 @@
+.DS_Store
+.cursor/
+graphify-out/
+
+# Assignment-supplied material — not redistributed
+intake-takehome-2/
+takehome-1b/
+*.pdf
+*.zip

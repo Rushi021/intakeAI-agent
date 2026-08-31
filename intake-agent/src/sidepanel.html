@@ -1,0 +1,90 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Intake Agent</title>
+<link rel="stylesheet" href="./panel.css" />
+
+<nav class="tabs" role="tablist">
+  <button role="tab" data-tab="build" class="on">Build</button>
+  <button role="tab" data-tab="trace">Trace</button>
+</nav>
+
+<!-- ── User tab: two controls, nothing else. ────────────────────────────── -->
+<main id="tab-build">
+  <label class="drop">
+    <input type="file" id="ir" accept=".json,application/json" />
+    <span id="ir-name">Choose the study input file (.ir.json)</span>
+  </label>
+  <p id="ir-out" class="muted center"></p>
+
+  <div class="center">
+    <button id="start" class="primary" disabled>Start build</button>
+  </div>
+  <p id="status" class="muted center"></p>
+</main>
+
+<!-- ── Backend tab: traceability. ───────────────────────────────────────── -->
+<main id="tab-trace" hidden>
+  <section>
+    <h2>Input file</h2>
+    <p id="t-study" class="muted">No input file loaded.</p>
+    <dl id="t-counts" class="counts"></dl>
+    <div id="t-tree"></div>
+  </section>
+
+  <section>
+    <h2>Perception</h2>
+    <p class="muted">
+      <b>Perceive</b> = read the page the way a screen reader does, not the way a
+      scraper does. The agent asks Chrome for the page's computed
+      <b>accessibility tree</b> — every node's role (button, textbox, dialog),
+      its accessible name, its value and its state — then keeps the nodes a
+      study builder could act on plus the nodes that explain them, and drops
+      layout wrappers. Roles and names are the one layer every eSource platform
+      agrees on, so nothing here is tied to a particular DOM.
+    </p>
+    <dl id="t-perceive" class="counts"></dl>
+    <p id="t-stale" class="stale hidden"></p>
+    <button id="detach" disabled>Detach debugger</button>
+  </section>
+
+  <section>
+    <h2>Model</h2>
+    <dl id="m-info" class="counts"></dl>
+    <p id="m-out" class="muted"></p>
+    <button id="m-test">Test connection</button>
+  </section>
+
+  <section>
+    <details>
+      <summary>Pruned view — what the model sees <span id="t-kept" class="muted"></span></summary>
+      <pre id="compact">Not captured yet.</pre>
+    </details>
+
+    <details>
+      <summary>Full detail — retained locally, pulled on demand</summary>
+      <p class="muted">
+        Nothing pruned is lost. Every node stays addressable by its
+        <code>ref</code>, so the agent can recover any subtree it needs.
+      </p>
+      <div class="tools">
+        <label>ref <input type="number" id="ref" placeholder="17" /></label>
+        <button id="expand">Expand around</button>
+        <button id="dialog">Dialog controls</button>
+        <label>x <input type="number" id="x" /></label>
+        <label>y <input type="number" id="y" /></label>
+        <button id="near">Nodes near</button>
+      </div>
+      <pre id="detail">—</pre>
+    </details>
+
+    <details>
+      <summary>Capture options</summary>
+      <label class="muted">
+        <input type="checkbox" id="shot" /> capture screenshot
+        <small>— off by default: an eSource screen can carry patient data.</small>
+      </label>
+    </details>
+  </section>
+</main>
+
+<script type="module" src="./sidepanel.ts"></script>
