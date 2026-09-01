@@ -67,7 +67,7 @@ rerun should be fast" — the full table is in
 
 ## Modules
 
-Three new files. Dependency direction stays one-way, as in [README.md](README.md):
+Three new files. Dependency direction stays one-way, as in [ARCHITECTURE.md](ARCHITECTURE.md):
 
 ```
 sidepanel → run → { resolve, act, perceive, ir, llm }
@@ -243,9 +243,12 @@ resolves deterministically only when all three hold:
 That is what stops the near-neighbour failure the brief calls the most common
 way a build looks finished and is not. `checkbox` scores 3 on "Checkbox" and 0
 on "Check List"; `multi_select` scores 3 on "Check List" and 0 on "Checkbox".
-A platform shipping "Select" and "Multi Select" side by side ties for
-`single_select`, the rule refuses, and the item falls to Layer 3.
-**Abstention is the feature.**
+A platform shipping "Dropdown" and "Picklist" side by side ties for
+`single_select` — both read exactly as one — so the rule refuses and the item
+falls to Layer 3. ("Select" beside "Multi Select" is *not* a tie: the first is a
+whole-name hit and the second only a word hit, so the margin holds and both
+resolve correctly. Abstaining there would send a resolvable question to a human,
+which is its own failure.) **Abstention is the feature.**
 
 **`discoverLibrary(snap)`** — the agent is not told an element library exists.
 Look for a cluster of ≥ 5 actionable nodes at similar tree depth whose names

@@ -19,7 +19,7 @@ quietly resolved. Six, in descending order of how much they change the design.
 The brief defines a session as *"the background/service-worker process holding
 the in-memory Layer 2 cache and ledger."* That process does not exist here.
 `src/sw.ts` is four lines that open the side panel, and
-[intake-agent/README.md](README.md) states the reason explicitly: *"the agent
+[ARCHITECTURE.md](ARCHITECTURE.md) states the reason explicitly: *"the agent
 loop — a service worker is killed on idle and would die mid-run."* All run state
 (`ir`, `snap`, `tab`) lives in the **side panel document**.
 
