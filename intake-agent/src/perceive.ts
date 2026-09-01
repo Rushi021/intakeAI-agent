@@ -78,6 +78,14 @@ const STATE_PROPS = new Set([
 
 const norm = (r?: string) => (r ?? '').toLowerCase();
 
+/**
+ * Accessible names, compared the way a human would read them: case, padding,
+ * punctuation and runs of whitespace are noise. Shared by locate() and the
+ * type scorer, so "Add Field", "add field" and "+ Add  Field" are one name.
+ */
+export const normName = (s?: string) =>
+  (s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+
 function stateOf(n: AXNode): string[] | undefined {
   const out: string[] = [];
   for (const p of n.properties ?? []) {
