@@ -18,8 +18,33 @@
 
   <div class="center">
     <button id="start" class="primary" disabled>Start build</button>
+    <button id="stop" hidden>Stop</button>
   </div>
   <p id="status" class="muted center"></p>
+
+  <!-- The guarantee, printed. built + escalated must equal the plan. -->
+  <dl id="tally" class="counts"></dl>
+
+  <section id="gate-wrap" hidden>
+    <h2>Needs a decision <span id="gate-n" class="muted"></span></h2>
+    <p class="muted">
+      One card per <b>question</b>, not per field — the first three single-selects
+      that fail to resolve are one decision, not three. Nothing on a card was
+      built: an escalated item is never committed and then corrected, it is
+      never committed at all. Answer, then <b>Resume</b>.
+    </p>
+    <div id="gate"></div>
+    <div class="center"><button id="resume" class="primary" hidden>Resume</button></div>
+  </section>
+
+  <section>
+    <h2>Progress</h2>
+    <p class="muted">
+      Derived from the ledger on every render, never stored, so it cannot drift
+      from what was actually built. Click an escalated row to jump to its card.
+    </p>
+    <div id="tree"></div>
+  </section>
 </main>
 
 <!-- ── Backend tab: traceability. ───────────────────────────────────────── -->
@@ -45,6 +70,18 @@
     <dl id="t-perceive" class="counts"></dl>
     <p id="t-stale" class="stale hidden"></p>
     <button id="detach" disabled>Detach debugger</button>
+  </section>
+
+  <section>
+    <h2>Ledger</h2>
+    <p class="muted">
+      One row per plan item: which entry in the input file it came from, what
+      was decided, where that decision came from, what read back, and how many
+      attempts it took. Traceability as a by-product of the loop rather than a
+      separate mechanism.
+    </p>
+    <label class="muted"><input type="checkbox" id="led-esc" /> escalated only</label>
+    <pre id="ledger">Nothing built yet.</pre>
   </section>
 
   <section>

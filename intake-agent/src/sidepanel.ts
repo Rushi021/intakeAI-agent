@@ -1,7 +1,8 @@
 import { attach, detach, detachOnUnload, setStaleHandler } from './cdp.ts';
 import { snapshot, toPrompt, expandAround, dialogControls, nodesNear, type Snapshot } from './perceive.ts';
-import { parseIR, stats, type IR } from './ir.ts';
+import { parseIR, stats, planItems, type IR } from './ir.ts';
 import { PROVIDERS, CONFIG, hasKey, testConnection } from './llm.ts';
+import { newSession, run, statusTree, summary, type Session, type StatusNode } from './run.ts';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const el = (tag: string, text?: string, cls?: string) => {
@@ -14,6 +15,15 @@ const el = (tag: string, text?: string, cls?: string) => {
 let ir: IR | null = null;
 let snap: Snapshot | null = null;
 let tab: chrome.tabs.Tab | null = null;
+
+/**
+ * The session is this document's lifetime — not a service worker's. sw.ts holds
+ * no state and deliberately never will, so MV3 eviction cannot silently destroy
+ * a run's ledger. Closing the panel ends the session; that is also the
+ * operator's way to force a full re-verification from the root.
+ */
+let session: Session | null = null;
+let stopping = false;
 
 detachOnUnload();
 
@@ -43,30 +53,51 @@ $<HTMLInputElement>('ir').addEventListener('change', async (e) => {
   }
 });
 
-$('start').addEventListener('click', async () => {
+$('start').addEventListener('click', () => void go(false));
+$('resume').addEventListener('click', () => void go(true));
+$('stop').addEventListener('click', () => { stopping = true; $('status').textContent = 'Stopping after the current item…'; });
+
+async function go(resuming: boolean): Promise<void> {
   if (!ir) return;
-  const btn = $<HTMLButtonElement>('start');
-  btn.disabled = true;
-  $('status').textContent = 'Reading the page…';
+  stopping = false;
+  $<HTMLButtonElement>('start').disabled = true;
+  $<HTMLButtonElement>('resume').hidden = true;
+  $('stop').hidden = false;
+  $('status').textContent = resuming ? 'Resuming…' : 'Reading the page…';
+
   try {
     [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
     if (!tab?.id) throw new Error('no active tab to build into');
     await attach(tab.id);
     $<HTMLButtonElement>('detach').disabled = false;
-    await capture();
-    // Pass 1 stops here: the page is perceived, nothing is written. Planning
-    // and building land in the next pass.
-    $('status').textContent =
-      `Page read: ${snap!.compact.length} actionable nodes. Open the Trace tab to inspect. ` +
-      `Building is not implemented yet.`;
+
+    // A new session on a fresh start; the same one on Resume, so answered gate
+    // cards stay cached and the confirmed history is not re-verified.
+    if (!resuming || !session) session = newSession(tab.id, tab.url ?? '', ir);
+
+    const result = await run(session, ir, capture, {
+      tabId: tab.id,
+      shouldStop: () => stopping,
+      onProgress: (done, total, item) => {
+        $('status').textContent = `${done}/${total} · ${item.id}`;
+        render();
+      },
+    });
+
+    render();
+    $('status').textContent = result.ok
+      ? `Done in ${Math.round(result.ms / 1000)}s · ${result.llmCalls} model calls${result.resumed ? ' · resumed' : ''}`
+      : `Finished with ${result.unaccounted.length} unaccounted — that is a bug in the agent, not a result.`;
   } catch (err) {
     $('status').textContent = String(err);
   } finally {
-    btn.disabled = false;
+    $('stop').hidden = true;
+    $<HTMLButtonElement>('start').disabled = false;
+    render();
   }
-});
+}
 
-async function capture(): Promise<void> {
+async function capture(): Promise<Snapshot> {
   snap = await snapshot(
     { url: tab?.url ?? '', title: tab?.title ?? '' },
     { screenshot: $<HTMLInputElement>('shot').checked },
@@ -80,9 +111,11 @@ async function capture(): Promise<void> {
     ['kept in pruned view', String(snap.compact.length)],
     ['dropped as layout noise', `${pruned}%`],
     ['screenshot', snap.full.screenshot ? 'captured' : 'not captured'],
+    ['page settled', snap.settled.quiet ? `yes (${snap.settled.polls} polls, ${snap.settled.ms}ms)` : `NO — read after ${snap.settled.ms}ms`],
   ]);
   $('t-kept').textContent = `(${snap.compact.length} nodes)`;
   $('compact').textContent = toPrompt(snap);
+  return snap;
 }
 
 // ── Trace tab ───────────────────────────────────────────────────────────────
@@ -174,3 +207,120 @@ const num = (id: string) => Number($<HTMLInputElement>(id).value);
 $('expand').addEventListener('click', () => snap && show(expandAround(snap, num('ref'))));
 $('dialog').addEventListener('click', () => snap && show(dialogControls(snap)));
 $('near').addEventListener('click', () => snap && show(nodesNear(snap, num('x'), num('y'))));
+
+// ── The operator's view: what got built, and what needs a decision ──────────
+//
+// Every number and every row here is derived from the ledger and the queue on
+// each render. Nothing is stored separately, so the display cannot drift from
+// what was actually built — the same reason assertTerminated backs the counts
+// rather than a tally the UI keeps for itself.
+
+function render(): void {
+  if (!ir || !session) return;
+  const s = summary(session, ir);
+
+  counts('tally', [
+    ['built', String(s.built + s.reused)],
+    ['escalated', String(s.escalated)],
+    ['not reached', String(s.total - s.built - s.reused - s.escalated - s.inFlight)],
+    ['unaccounted', String(s.unaccounted)], // must be 0, or the agent has a bug
+    ['plan items', String(s.total)],
+  ]);
+  $('tally').classList.toggle('bad', s.unaccounted > 0);
+
+  renderGate();
+  renderStatus();
+  renderLedger();
+}
+
+function renderGate(): void {
+  const open = [...session!.queue.values()].filter((c) => !c.answered);
+  $('gate-wrap').hidden = open.length === 0;
+  $('gate-n').textContent = open.length ? `(${open.length})` : '';
+  $<HTMLButtonElement>('resume').hidden = open.length === session!.queue.size;
+
+  const box = $('gate');
+  box.replaceChildren();
+  for (const card of open) {
+    const c = el('div', undefined, 'card');
+    c.id = `card-${card.signature}`;
+    c.append(el('h3', card.question));
+    c.append(el('p', `${card.items.length} item${card.items.length === 1 ? '' : 's'} waiting — ${card.items.slice(0, 3).join(', ')}${card.items.length > 3 ? ` and ${card.items.length - 3} more` : ''}`, 'muted'));
+
+    const tried = el('details') as HTMLDetailsElement;
+    tried.append(el('summary', 'what the agent tried'));
+    tried.append(el('pre', card.tried.join('\n') || '—'));
+    c.append(tried);
+
+    if (card.choices.length) {
+      // The answer is chosen from the live page, never typed. A free-text box
+      // would let a human invent a control that is not there.
+      const list = el('div', undefined, 'choices');
+      for (const choice of card.choices) {
+        const b = el('button', choice.name) as HTMLButtonElement;
+        b.addEventListener('click', () => {
+          session!.facts.set(card.signature, { value: choice.name, descriptor: { name: choice.name }, source: 'human' });
+          card.answered = { value: choice.name, descriptor: { name: choice.name } };
+          render();
+        });
+        list.append(b);
+      }
+      c.append(list);
+    } else {
+      c.append(el('p', 'No candidate on the current screen. Navigate the platform to where this is possible, then Resume.', 'muted'));
+    }
+    box.append(c);
+  }
+}
+
+function renderStatus(): void {
+  const box = $('tree');
+  box.replaceChildren();
+  for (const visit of statusTree(ir!, session!.ledger)) box.append(nodeRow(visit, true));
+}
+
+function nodeRow(n: StatusNode, openable: boolean): HTMLElement {
+  const kids = n.children.length;
+  const line = `${n.label} — ${n.status}${kids ? ` (${n.children.filter((c) => c.status === 'complete').length}/${kids})` : ''}`;
+
+  if (!kids) {
+    const row = el(n.status === 'escalated' ? 'button' : 'div', line, `row ${n.status}`);
+    if (n.status === 'escalated') row.addEventListener('click', () => jumpTo(n.id));
+    return row;
+  }
+  const d = el('details', undefined, n.status) as HTMLDetailsElement;
+  d.open = openable && n.status !== 'complete';
+  d.append(el('summary', line));
+  for (const kid of n.children) d.append(nodeRow(kid, false));
+  return d;
+}
+
+/** The item id is already the shared key across the IR, the ledger and the queue. */
+function jumpTo(itemId: string): void {
+  const card = [...session!.queue.values()].find((c) => c.items.includes(itemId));
+  if (!card) return;
+  document.getElementById(`card-${card.signature}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function renderLedger(): void {
+  const escOnly = $<HTMLInputElement>('led-esc').checked;
+  const rows = session!.ledger.all().filter((r) => !escOnly || r.state === 'escalated');
+  $('ledger').textContent = rows.length
+    ? rows
+        .map((r) =>
+          [
+            r.item,
+            r.state,
+            r.source ?? r.signature ?? '',
+            r.settled === false ? 'page-not-settled' : '',
+            `${r.attempts} attempt${r.attempts === 1 ? '' : 's'}`,
+            r.history.at(-1) ?? '',
+          ]
+            .filter(Boolean)
+            .join('  ·  '),
+        )
+        .join('\n')
+    : 'Nothing built yet.';
+}
+
+$('led-esc').addEventListener('change', () => session && render());
