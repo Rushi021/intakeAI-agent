@@ -125,3 +125,102 @@ test('a modal dialog wins over a stale non-modal one', () => {
   const snap = { compact, full: { byAxId: all, byRef, bbox: boxes } } as any;
   assert.deepEqual(dialogControls(snap).map((d) => d.name), ['Discard changes?', 'Discard']);
 });
+
+// ── comparison: one primitive, four readings of it ──────────────────────────
+
+import { diff, classify, errorsIn, settle, toPrompt, activeDialog } from '../src/perceive.ts';
+import { N as NN, props as P, snap as SNAP } from './helpers.ts';
+
+test('an identical view produces an empty diff', () => {
+  const s = SNAP(NN('RootWebArea', 'x', [NN('button', 'Save')]));
+  const d = diff(s.compact, s.compact);
+  assert.equal(d.added.length + d.removed.length + d.changed.length, 0);
+});
+
+test('a value change is a change, not an add plus a remove', () => {
+  const before = SNAP(NN('RootWebArea', 'x', [NN('textbox', 'Label')]));
+  const after = { ...before, compact: before.compact.map((c) => (c.role === 'textbox' ? { ...c, value: 'Sex' } : c)) };
+  const d = diff(before.compact, after.compact);
+  assert.equal(d.changed.length, 1);
+  assert.equal(d.added.length + d.removed.length, 0);
+});
+
+test('a click that changes nothing is visible as an empty diff', () => {
+  // The trap the brief names: a control that looks like Save and is not.
+  const s = SNAP(NN('RootWebArea', 'x', [NN('button', 'Save As Template')]));
+  assert.equal(classify(s, s), 'none');
+});
+
+test('classify separates navigation, an overlay and an in-page re-render', () => {
+  const base = SNAP(NN('RootWebArea', 'x', [NN('button', 'Add Field')]));
+  assert.equal(classify(base, { ...base, url: base.url + '/other' }), 'navigated');
+
+  const withModal = SNAP(NN('RootWebArea', 'x', [NN('button', 'Add Field'), NN('dialog', 'New Field', [NN('button', 'OK')], P(['modal', true]))]));
+  assert.equal(classify(base, withModal), 'overlay-opened');
+  assert.equal(classify(withModal, base), 'overlay-closed');
+
+  const renamed = { ...base, compact: base.compact.map((c) => ({ ...c, name: c.name === 'Add Field' ? 'Adding…' : c.name })) };
+  assert.equal(classify(base, renamed), 'in-page');
+});
+
+test('a platform rejection is found, and is not a read-back failure', () => {
+  const before = SNAP(NN('RootWebArea', 'x', [NN('textbox', 'Max')]));
+  const after = SNAP(NN('RootWebArea', 'x', [NN('textbox', 'Max'), NN('alert', 'Range not allowed for this type')]));
+  const found = errorsIn(diff(before.compact, after.compact), after);
+  assert.equal(found.length, 1);
+  assert.match(found[0].text, /Range not allowed/);
+});
+
+test('a control that gained aria-invalid is surfaced', () => {
+  const before = SNAP(NN('RootWebArea', 'x', [NN('textbox', 'Weight')]));
+  const after = { ...before, compact: before.compact.map((c) => (c.role === 'textbox' ? { ...c, state: ['invalid=true'] } : c)) };
+  const found = errorsIn(diff(before.compact, after.compact), after);
+  assert.equal(found[0]?.kind, 'invalid');
+});
+
+test('a clean write surfaces no error', () => {
+  const before = SNAP(NN('RootWebArea', 'x', [NN('textbox', 'Label')]));
+  const after = { ...before, compact: before.compact.map((c) => ({ ...c, value: 'Sex' })) };
+  assert.deepEqual(errorsIn(diff(before.compact, after.compact), after), []);
+});
+
+test('the model sees only the modal that is blocking the user', () => {
+  const s = SNAP(NN('RootWebArea', 'x', [
+    NN('button', 'Delete Study'),
+    NN('dialog', 'Add Field', [NN('button', 'Create')], P(['modal', true])),
+  ]));
+  const prompt = toPrompt(s);
+  assert.ok(prompt.includes('Create'));
+  assert.ok(!prompt.includes('Delete Study'), 'a control behind the modal must not be offerable');
+  // Nothing is lost: it is still addressable by ref.
+  assert.ok(s.compact.some((c) => c.name === 'Delete Study'));
+  assert.notEqual(activeDialog(s), undefined);
+});
+
+// ── settling ────────────────────────────────────────────────────────────────
+
+const scripted = (seq: { hash: string; inflight: number }[]) => {
+  let i = 0;
+  return async () => seq[Math.min(i++, seq.length - 1)];
+};
+
+test('settle waits for the tree to stop moving and the network to go quiet', async () => {
+  const r = await settle({ quietMs: 0, timeoutMs: 500 }, scripted([
+    { hash: 'a', inflight: 1 }, { hash: 'b', inflight: 0 }, { hash: 'b', inflight: 0 },
+  ]));
+  assert.equal(r.quiet, true);
+});
+
+test('a request still in flight is not quiet, however stable the tree', async () => {
+  const r = await settle({ quietMs: 0, timeoutMs: 300 }, scripted([{ hash: 'a', inflight: 2 }]));
+  assert.equal(r.quiet, false, 'a pending request is about to change the DOM');
+});
+
+test('a page that never settles returns a fact, not an exception', async () => {
+  let n = 0;
+  const r = await settle({ quietMs: 0, timeoutMs: 300 }, async () => ({ hash: `h${n++}`, inflight: 0 }));
+  assert.equal(r.quiet, false);
+  assert.ok(r.polls > 1);
+  // The run continues and the ledger records it — an unsettled write is a
+  // different failure from a wrong decision, and conflating them misleads the gate.
+});
