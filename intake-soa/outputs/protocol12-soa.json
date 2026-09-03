@@ -1,0 +1,1133 @@
+{
+  "document": {
+    "filename": "protocol12.pdf",
+    "converter": "docling",
+    "convert_seconds": 0.0,
+    "pages": 97,
+    "tables": 12,
+    "text_items": 1327,
+    "labels": [
+      {
+        "label": "text",
+        "count": 622
+      },
+      {
+        "label": "list_item",
+        "count": 224
+      },
+      {
+        "label": "section_header",
+        "count": 183
+      },
+      {
+        "label": "table",
+        "count": 9
+      },
+      {
+        "label": "footnote",
+        "count": 7
+      },
+      {
+        "label": "caption",
+        "count": 4
+      },
+      {
+        "label": "document_index",
+        "count": 3
+      },
+      {
+        "label": "picture",
+        "count": 1
+      }
+    ]
+  },
+  "schedules": [
+    {
+      "soa_id": "soa-1",
+      "pages": [
+        48
+      ],
+      "fragments": [
+        {
+          "table_id": "table-9",
+          "page": 48,
+          "grid_size": [
+            42,
+            2
+          ],
+          "header_rows": [
+            {
+              "row_index": 0,
+              "cells": [
+                "Assessment",
+                "Screening/Baseline"
+              ],
+              "role": "study_period",
+              "role_source": "model"
+            },
+            {
+              "row_index": 1,
+              "cells": [
+                "Study Week",
+                "14-21 days prior to randomization"
+              ],
+              "role": "study_week",
+              "role_source": "model"
+            }
+          ],
+          "label_cols": [
+            0
+          ],
+          "columns": [
+            {
+              "col_index": 1,
+              "header_path": [
+                "Screening/Baseline",
+                "14-21 days prior to randomization"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "row_index": 2,
+              "label": "Screening",
+              "kind": "category",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 3,
+              "label": "Informed consent",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 4,
+              "label": "SCID/Psychiatric evaluation",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 5,
+              "label": "Medical history",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 6,
+              "label": "ACDS assessment (ADHD diagnosis)",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 7,
+              "label": "Meth Timeline Followback",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 8,
+              "label": "Prior medications",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 9,
+              "label": "Infectious disease panel/syphilis test/PPD",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 10,
+              "label": "HIV test (optional)",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 11,
+              "label": "Alcohol breathalyzer f",
+              "kind": "activity",
+              "kind_source": "model",
+              "markers": [
+                "f"
+              ],
+              "parent": 2
+            },
+            {
+              "row_index": 12,
+              "label": "Safety",
+              "kind": "category",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 13,
+              "label": "Physical exam",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 12
+            },
+            {
+              "row_index": 14,
+              "label": "Vital signs**",
+              "kind": "activity",
+              "kind_source": "model",
+              "markers": [
+                "**"
+              ],
+              "parent": 12
+            },
+            {
+              "row_index": 15,
+              "label": "Hematology",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 12
+            },
+            {
+              "row_index": 16,
+              "label": "Blood chemistries",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 12
+            },
+            {
+              "row_index": 17,
+              "label": "HAM-D",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 12
+            },
+            {
+              "row_index": 18,
+              "label": "Medical urinalysis",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 12
+            },
+            {
+              "row_index": 19,
+              "label": "Pregnancy test",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 12
+            },
+            {
+              "row_index": 20,
+              "label": "ECG",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 12
+            },
+            {
+              "row_index": 21,
+              "label": "Adverse events d",
+              "kind": "activity",
+              "kind_source": "model",
+              "markers": [
+                "d"
+              ],
+              "parent": 12
+            },
+            {
+              "row_index": 22,
+              "label": "Concomitant medications",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 12
+            },
+            {
+              "row_index": 23,
+              "label": "Efficacy",
+              "kind": "category",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 24,
+              "label": "ASI***",
+              "kind": "activity",
+              "kind_source": "model",
+              "markers": [
+                "***"
+              ],
+              "parent": 23
+            },
+            {
+              "row_index": 25,
+              "label": "ASI-Lite Follow-up",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 26,
+              "label": "HRBS***",
+              "kind": "activity",
+              "kind_source": "model",
+              "markers": [
+                "***"
+              ],
+              "parent": 23
+            },
+            {
+              "row_index": 27,
+              "label": "BSCS",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 28,
+              "label": "CGI-S",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 29,
+              "label": "CGI-O",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 30,
+              "label": "CANTABelect J",
+              "kind": "activity",
+              "kind_source": "model",
+              "markers": [
+                "J"
+              ],
+              "parent": 23
+            },
+            {
+              "row_index": 31,
+              "label": "Barratt Impulsiveness Scale",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 32,
+              "label": "ACDS",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 33,
+              "label": "AISRS assessment",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 34,
+              "label": "SUR",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 35,
+              "label": "Urine for meth/tox screen/creatinine",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 36,
+              "label": "Urine tox screen device** on site test",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 37,
+              "label": "Medication Administration",
+              "kind": "category",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 38,
+              "label": "Modafinil compliance",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 37
+            },
+            {
+              "row_index": 39,
+              "label": "CBT compliance **** h",
+              "kind": "activity",
+              "kind_source": "model",
+              "markers": [
+                "h"
+              ],
+              "parent": 37
+            },
+            {
+              "row_index": 40,
+              "label": "End of trial form",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 41,
+              "label": "Follow-up interview",
+              "kind": "activity",
+              "kind_source": "model"
+            }
+          ],
+          "cells": [
+            {
+              "row": 3,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 5,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 7,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 8,
+              "col": 1,
+              "value": "3X/week"
+            },
+            {
+              "row": 9,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 10,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 11,
+              "col": 1,
+              "value": "3X/week"
+            },
+            {
+              "row": 13,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 14,
+              "col": 1,
+              "value": "3X/week"
+            },
+            {
+              "row": 15,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 16,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 17,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 18,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 19,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 20,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 21,
+              "col": 1,
+              "value": "3X/week d",
+              "markers": [
+                "d"
+              ]
+            },
+            {
+              "row": 24,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 26,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 27,
+              "col": 1,
+              "value": "i Weekly",
+              "markers": [
+                "i"
+              ]
+            },
+            {
+              "row": 28,
+              "col": 1,
+              "value": "Weekly i",
+              "markers": [
+                "i"
+              ]
+            },
+            {
+              "row": 29,
+              "col": 1,
+              "value": "Weekly i",
+              "markers": [
+                "i"
+              ]
+            },
+            {
+              "row": 30,
+              "col": 1,
+              "value": "Twice"
+            },
+            {
+              "row": 31,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 32,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 33,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 34,
+              "col": 1,
+              "value": "3X/week"
+            },
+            {
+              "row": 35,
+              "col": 1,
+              "value": "3X/week"
+            },
+            {
+              "row": 36,
+              "col": 1,
+              "value": "3X/week"
+            },
+            {
+              "row": 39,
+              "col": 1,
+              "value": "2X/week h",
+              "markers": [
+                "h"
+              ]
+            }
+          ]
+        }
+      ],
+      "footnotes": [
+        {
+          "marker": "**",
+          "text": "**  Vital Signs and On-site Urine Toxicology Screen are both screening and baseline measures, and will serve as a possible basis for exclusion from study.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [
+            {
+              "page": 48,
+              "row": 14,
+              "col": 0,
+              "target": "row_label",
+              "cell_value": "Vital signs**"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "***",
+          "text": "*** ASI and HRBS also serve as both screening and baseline measures, but will not be used as a basis for exclusion from study.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [
+            {
+              "page": 48,
+              "row": 24,
+              "col": 0,
+              "target": "row_label",
+              "cell_value": "ASI***"
+            },
+            {
+              "page": 48,
+              "row": 26,
+              "col": 0,
+              "target": "row_label",
+              "cell_value": "HRBS***"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "****",
+          "text": "****CBT to be conducted three times a week during 12-week study medication administration period.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [],
+          "value_cells": [],
+          "scope": "unlinked"
+        },
+        {
+          "marker": "Xa",
+          "text": "X a - Vital signs are taken at each visit for the first three study weeks, then weekly thereafter, preferably at the first visit of the week.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [],
+          "value_cells": [],
+          "scope": "unlinked"
+        },
+        {
+          "marker": "Xb",
+          "text": "X b - Once per week preferably at the first visit of the week. If the study physician has medical concerns, blood may be drawn again to assess blood chemistry (for example, liver enzymes). In addition, at weeks 4 and 8, if female, a urine pregnancy test will be performed.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [],
+          "value_cells": [],
+          "scope": "unlinked"
+        },
+        {
+          "marker": "Xc",
+          "text": "X c - At the final scheduled study visit (preferably last visit of week 12) or if the subject discontinues prematurely. If the study physician has medical concerns, additional ECGs may be performed.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [],
+          "value_cells": [],
+          "scope": "unlinked"
+        },
+        {
+          "marker": "Xd",
+          "text": "X d - AEs will be assessed and recorded by investigative staff nurse or physician or PIs designee at every visit. A study physician will meet with the subject once a week to review the AEs and to assess for any additional AEs. X e -If there is a clear indication that a participant will terminate early and not return for the termination interview, the ASI-Lite Follow-up interview should be conducted as soon as possible during any scheduled or unscheduled visit.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [
+            {
+              "page": 48,
+              "row": 21,
+              "col": 0,
+              "target": "row_label",
+              "cell_value": "Adverse events d"
+            },
+            {
+              "page": 48,
+              "row": 21,
+              "col": 1,
+              "target": "cell",
+              "cell_value": "3X/week d"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xf",
+          "text": "X f - The alcohol breathalyzer test will only be performed if the subject is suspected to be intoxicated at clinic visits in accordance with institutional and state regulations.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [
+            {
+              "page": 48,
+              "row": 11,
+              "col": 0,
+              "target": "row_label",
+              "cell_value": "Alcohol breathalyzer f"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xg",
+          "text": "X g - On study day 1, prior to randomization.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [],
+          "value_cells": [],
+          "scope": "unlinked"
+        },
+        {
+          "marker": "Xh",
+          "text": "X h - During screening/baseline, subjects will attend 2 60-minute early recovery skills sessions each week.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [
+            {
+              "page": 48,
+              "row": 39,
+              "col": 0,
+              "target": "row_label",
+              "cell_value": "CBT compliance **** h"
+            },
+            {
+              "page": 48,
+              "row": 39,
+              "col": 1,
+              "target": "cell",
+              "cell_value": "2X/week h"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xi",
+          "text": "X i - Obtained weekly during screening/baseline.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [
+            {
+              "page": 48,
+              "row": 27,
+              "col": 1,
+              "target": "cell",
+              "cell_value": "i Weekly"
+            },
+            {
+              "page": 48,
+              "row": 28,
+              "col": 1,
+              "target": "cell",
+              "cell_value": "Weekly i"
+            },
+            {
+              "page": 48,
+              "row": 29,
+              "col": 1,
+              "target": "cell",
+              "cell_value": "Weekly i"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "XJ",
+          "text": "X J - CANTABelect tests should be completed twice during the screening/baseline period.  The IED test (IntraExtra Dimensional Set Shifting) will only be done at week 12 or the termination visit, whichever comes first.",
+          "page": 49,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break-markers",
+          "targets": [
+            {
+              "page": 48,
+              "row": 30,
+              "col": 0,
+              "target": "row_label",
+              "cell_value": "CANTABelect J"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        }
+      ],
+      "detection": [
+        {
+          "table_id": "table-9",
+          "page": 48,
+          "score": 1.5,
+          "verdict": "select",
+          "signals": {
+            "R1_marks": 1.0,
+            "R2_footnotes": 0.5,
+            "R3_grid": 0.0
+          },
+          "mark_share": 0.871,
+          "gate": "column 0: 7 timepoint labels",
+          "footnote_evidence": "1 block(s), markers ['**', '***', '****', 'XJ', 'Xa', 'Xb', 'Xc', 'Xd', 'Xf', 'Xg', 'Xh', 'Xi']"
+        }
+      ],
+      "review": {
+        "markers_in_table_without_definition": [],
+        "footnotes_never_used_in_table": [
+          "****",
+          "Xa",
+          "Xb",
+          "Xc",
+          "Xg"
+        ],
+        "orphan_positions": [],
+        "unmerged_fragment_warning": null
+      },
+      "interpretation": [
+        {
+          "status": "ok",
+          "model": "mistral-medium-latest",
+          "header_roles_applied": 2,
+          "rows_applied": 40,
+          "rows_unanswered": [],
+          "indices_invented": []
+        }
+      ]
+    }
+  ],
+  "review": {
+    "schedules_found": 1,
+    "near_miss_tables": [
+      {
+        "table_id": "table-6",
+        "page": 30,
+        "score": 1.0,
+        "mark_share": 0.0,
+        "gate": "column 0: ordered numeric sequence [6, 6, 7, 7, 13, 13]\u2026"
+      }
+    ],
+    "footnote_blocks": {
+      "accept": 4,
+      "review": 1,
+      "discard": 4
+    },
+    "footnote_blocks_flagged": [
+      {
+        "page": 9,
+        "score": 3,
+        "markers": [
+          "*",
+          "**",
+          "***"
+        ],
+        "attached_to": null
+      }
+    ]
+  },
+  "table_scores": [
+    {
+      "table_id": "table-9",
+      "index": 8,
+      "page": 48,
+      "rows": 42,
+      "cols": 2,
+      "body_rows": 40,
+      "value_cols": 1,
+      "non_empty": 31,
+      "empty": 9,
+      "mark_share": 0.871,
+      "marks": 27,
+      "eligible": true,
+      "gate_why": "column 0: 7 timepoint labels",
+      "fn_why": "1 block(s), markers ['**', '***', '****', 'XJ', 'Xa', 'Xb', 'Xc', 'Xd', 'Xf', 'Xg', 'Xh', 'Xi']",
+      "score": 1.5,
+      "signals": {
+        "R1_marks": 1.0,
+        "R2_footnotes": 0.5,
+        "R3_grid": 0.0
+      },
+      "verdict": "select"
+    },
+    {
+      "table_id": "table-6",
+      "index": 5,
+      "page": 30,
+      "rows": 13,
+      "cols": 9,
+      "body_rows": 11,
+      "value_cols": 8,
+      "non_empty": 88,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: ordered numeric sequence [6, 6, 7, 7, 13, 13]\u2026",
+      "fn_why": "1 block(s), markers ['*']",
+      "score": 1.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.5,
+        "R3_grid": 0.5
+      },
+      "verdict": "review"
+    },
+    {
+      "table_id": "table-7",
+      "index": 6,
+      "page": 31,
+      "rows": 7,
+      "cols": 6,
+      "body_rows": 0,
+      "value_cols": 5,
+      "non_empty": 0,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: ordered numeric sequence [6, 7, 13, 14, 20, 21]\u2026",
+      "fn_why": "1 block(s), markers ['\u2020']",
+      "score": 0.5,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.5,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-1",
+      "index": 0,
+      "page": 4,
+      "rows": 42,
+      "cols": 3,
+      "body_rows": 41,
+      "value_cols": 0,
+      "non_empty": 0,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: ordered numeric sequence [4, 4, 4, 4, 4, 4]\u2026",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-2",
+      "index": 1,
+      "page": 5,
+      "rows": 50,
+      "cols": 3,
+      "body_rows": 38,
+      "value_cols": 2,
+      "non_empty": 43,
+      "empty": 33,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: 4 timepoint labels",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-3",
+      "index": 2,
+      "page": 6,
+      "rows": 32,
+      "cols": 4,
+      "body_rows": 32,
+      "value_cols": 3,
+      "non_empty": 66,
+      "empty": 30,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: ordered numeric sequence [14, 14, 14, 15, 15, 15]\u2026",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-4",
+      "index": 3,
+      "page": 7,
+      "rows": 41,
+      "cols": 2,
+      "body_rows": 41,
+      "value_cols": 1,
+      "non_empty": 41,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: ordered numeric sequence [-1, -1, 2, 2, 2, 3]\u2026",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-5",
+      "index": 4,
+      "page": 8,
+      "rows": 26,
+      "cols": 2,
+      "body_rows": 26,
+      "value_cols": 1,
+      "non_empty": 26,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-8",
+      "index": 7,
+      "page": 32,
+      "rows": 10,
+      "cols": 4,
+      "body_rows": 0,
+      "value_cols": 3,
+      "non_empty": 0,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-10",
+      "index": 9,
+      "page": 67,
+      "rows": 5,
+      "cols": 2,
+      "body_rows": 4,
+      "value_cols": 1,
+      "non_empty": 4,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "1 block(s), markers ['*']",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.5,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-11",
+      "index": 10,
+      "page": 72,
+      "rows": 9,
+      "cols": 3,
+      "body_rows": 8,
+      "value_cols": 2,
+      "non_empty": 12,
+      "empty": 4,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-12",
+      "index": 11,
+      "page": 72,
+      "rows": 8,
+      "cols": 3,
+      "body_rows": 7,
+      "value_cols": 2,
+      "non_empty": 8,
+      "empty": 6,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    }
+  ]
+}

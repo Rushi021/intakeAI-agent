@@ -1,0 +1,1962 @@
+{
+  "document": {
+    "filename": "protocol15.pdf",
+    "converter": "docling",
+    "convert_seconds": 0.0,
+    "pages": 61,
+    "tables": 12,
+    "text_items": 881,
+    "labels": [
+      {
+        "label": "text",
+        "count": 269
+      },
+      {
+        "label": "list_item",
+        "count": 241
+      },
+      {
+        "label": "section_header",
+        "count": 161
+      },
+      {
+        "label": "table",
+        "count": 9
+      },
+      {
+        "label": "footnote",
+        "count": 5
+      },
+      {
+        "label": "document_index",
+        "count": 3
+      },
+      {
+        "label": "caption",
+        "count": 3
+      },
+      {
+        "label": "picture",
+        "count": 1
+      }
+    ]
+  },
+  "schedules": [
+    {
+      "soa_id": "soa-1",
+      "pages": [
+        25
+      ],
+      "fragments": [
+        {
+          "table_id": "table-5",
+          "page": 25,
+          "grid_size": [
+            36,
+            11
+          ],
+          "header_rows": [
+            {
+              "row_index": 0,
+              "cells": [
+                "Assessment",
+                "Screening",
+                "Baseline",
+                "",
+                "Treatment",
+                "Treatment",
+                "Treatment",
+                "Treatment",
+                "Treatment",
+                "Treatment",
+                "Follow-up"
+              ],
+              "role": "study_period",
+              "role_source": "model"
+            },
+            {
+              "row_index": 1,
+              "cells": [
+                "Study Week",
+                "-4 to 0*",
+                "-4 to 0*",
+                "",
+                "1-3",
+                "4",
+                "5-7",
+                "8",
+                "9 -11",
+                "12",
+                "16"
+              ],
+              "role": "study_week",
+              "role_source": "model",
+              "markers": [
+                "*"
+              ]
+            }
+          ],
+          "label_cols": [
+            0,
+            3
+          ],
+          "columns": [
+            {
+              "col_index": 1,
+              "header_path": [
+                "Screening",
+                "-4 to 0*"
+              ]
+            },
+            {
+              "col_index": 2,
+              "header_path": [
+                "Baseline",
+                "-4 to 0*"
+              ]
+            },
+            {
+              "col_index": 4,
+              "header_path": [
+                "Treatment",
+                "1-3"
+              ]
+            },
+            {
+              "col_index": 5,
+              "header_path": [
+                "Treatment",
+                "4"
+              ]
+            },
+            {
+              "col_index": 6,
+              "header_path": [
+                "Treatment",
+                "5-7"
+              ]
+            },
+            {
+              "col_index": 7,
+              "header_path": [
+                "Treatment",
+                "8"
+              ]
+            },
+            {
+              "col_index": 8,
+              "header_path": [
+                "Treatment",
+                "9 -11"
+              ]
+            },
+            {
+              "col_index": 9,
+              "header_path": [
+                "Treatment",
+                "12"
+              ]
+            },
+            {
+              "col_index": 10,
+              "header_path": [
+                "Follow-up",
+                "16"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "row_index": 2,
+              "label": "Screening",
+              "kind": "category",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 3,
+              "label": "Informed consent",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 4,
+              "label": "SCID",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 5,
+              "label": "Psychiatric evaluation",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 6,
+              "label": "ADD evaluation",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 7,
+              "label": "Medical history",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 8,
+              "label": "Prior medications",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 9,
+              "label": "Infectious disease panel/ syphilis test",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 10,
+              "label": "HIV Test (optional)",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 2
+            },
+            {
+              "row_index": 11,
+              "label": "Safety",
+              "kind": "category",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 12,
+              "label": "Physical exam/FEV d 1 M I",
+              "kind": "activity",
+              "kind_source": "model",
+              "markers": [
+                "d"
+              ],
+              "parent": 11
+            },
+            {
+              "row_index": 13,
+              "label": "Vital signs M I",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 11
+            },
+            {
+              "row_index": 14,
+              "label": "Hematology M I",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 11
+            },
+            {
+              "row_index": 15,
+              "label": "Blood chemistries M I",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 11
+            },
+            {
+              "row_index": 16,
+              "label": "Ham-D M I",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 11
+            },
+            {
+              "row_index": 17,
+              "label": "CSSA M I",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 11
+            },
+            {
+              "row_index": 18,
+              "label": "Urinalysis M I",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 11
+            },
+            {
+              "row_index": 19,
+              "label": "Pregnancy test M I",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 11
+            },
+            {
+              "row_index": 20,
+              "label": "ECG M I",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 11
+            },
+            {
+              "row_index": 21,
+              "label": "Adverse events M I",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 11
+            },
+            {
+              "row_index": 22,
+              "label": "Concomitant medications M I",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 11
+            },
+            {
+              "row_index": 23,
+              "label": "Efficacy",
+              "kind": "category",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 24,
+              "label": "ASI-Lite",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 25,
+              "label": "HRBS",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 26,
+              "label": "BSCS",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 27,
+              "label": "CCQ-NOW",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 28,
+              "label": "CGI-S",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 29,
+              "label": "CGI-O",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 30,
+              "label": "SUI",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 31,
+              "label": "Urine BE and creatinine",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 32,
+              "label": "Urine tox screen",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 33,
+              "label": "Serum prolactin",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 34,
+              "label": "Treatment compliance",
+              "kind": "activity",
+              "kind_source": "model",
+              "parent": 23
+            },
+            {
+              "row_index": 35,
+              "label": "Follow-up interview",
+              "kind": "activity",
+              "kind_source": "model"
+            }
+          ],
+          "cells": [
+            {
+              "row": 3,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 5,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 7,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 7,
+              "col": 4,
+              "value": "R"
+            },
+            {
+              "row": 8,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 8,
+              "col": 4,
+              "value": "A"
+            },
+            {
+              "row": 9,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 9,
+              "col": 4,
+              "value": "N"
+            },
+            {
+              "row": 10,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 10,
+              "col": 4,
+              "value": "D"
+            },
+            {
+              "row": 11,
+              "col": 4,
+              "value": "O"
+            },
+            {
+              "row": 12,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 9,
+              "value": "c X",
+              "markers": [
+                "c"
+              ]
+            },
+            {
+              "row": 13,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 13,
+              "col": 4,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 13,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 13,
+              "col": 6,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 13,
+              "col": 7,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 13,
+              "col": 8,
+              "value": "b X"
+            },
+            {
+              "row": 13,
+              "col": 9,
+              "value": "c X"
+            },
+            {
+              "row": 14,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 14,
+              "col": 4,
+              "value": "Z"
+            },
+            {
+              "row": 14,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 14,
+              "col": 7,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 14,
+              "col": 9,
+              "value": "c X"
+            },
+            {
+              "row": 15,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 15,
+              "col": 4,
+              "value": "A"
+            },
+            {
+              "row": 15,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 15,
+              "col": 7,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 15,
+              "col": 9,
+              "value": "c X"
+            },
+            {
+              "row": 16,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 16,
+              "col": 4,
+              "value": "T"
+            },
+            {
+              "row": 16,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 16,
+              "col": 7,
+              "value": "b X"
+            },
+            {
+              "row": 16,
+              "col": 9,
+              "value": "c X"
+            },
+            {
+              "row": 17,
+              "col": 2,
+              "value": "3X"
+            },
+            {
+              "row": 17,
+              "col": 4,
+              "value": "I b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 17,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 17,
+              "col": 6,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 17,
+              "col": 7,
+              "value": "b X"
+            },
+            {
+              "row": 17,
+              "col": 8,
+              "value": "b X"
+            },
+            {
+              "row": 17,
+              "col": 9,
+              "value": "c X"
+            },
+            {
+              "row": 18,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 18,
+              "col": 4,
+              "value": "O"
+            },
+            {
+              "row": 18,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 18,
+              "col": 7,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 18,
+              "col": 9,
+              "value": "c X"
+            },
+            {
+              "row": 19,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 19,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 19,
+              "col": 7,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 19,
+              "col": 9,
+              "value": "c X"
+            },
+            {
+              "row": 20,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 20,
+              "col": 4,
+              "value": "N"
+            },
+            {
+              "row": 20,
+              "col": 9,
+              "value": "c X",
+              "markers": [
+                "c"
+              ]
+            },
+            {
+              "row": 20,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 21,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 21,
+              "col": 2,
+              "value": "X"
+            },
+            {
+              "row": 21,
+              "col": 4,
+              "value": "3X"
+            },
+            {
+              "row": 21,
+              "col": 5,
+              "value": "3X"
+            },
+            {
+              "row": 21,
+              "col": 6,
+              "value": "3X"
+            },
+            {
+              "row": 21,
+              "col": 7,
+              "value": "3X"
+            },
+            {
+              "row": 21,
+              "col": 8,
+              "value": "3X"
+            },
+            {
+              "row": 21,
+              "col": 9,
+              "value": "3X"
+            },
+            {
+              "row": 21,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 22,
+              "col": 2,
+              "value": "Weekly x 2 weeks"
+            },
+            {
+              "row": 22,
+              "col": 4,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 22,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 22,
+              "col": 6,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 22,
+              "col": 7,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 22,
+              "col": 8,
+              "value": "b X"
+            },
+            {
+              "row": 22,
+              "col": 9,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 22,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 24,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 24,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 24,
+              "col": 7,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 24,
+              "col": 9,
+              "value": "c X"
+            },
+            {
+              "row": 25,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 25,
+              "col": 9,
+              "value": "c X",
+              "markers": [
+                "c"
+              ]
+            },
+            {
+              "row": 26,
+              "col": 2,
+              "value": "Weekly x 2 weeks"
+            },
+            {
+              "row": 26,
+              "col": 4,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 26,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 26,
+              "col": 6,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 26,
+              "col": 7,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 26,
+              "col": 8,
+              "value": "b X"
+            },
+            {
+              "row": 26,
+              "col": 9,
+              "value": "b X"
+            },
+            {
+              "row": 27,
+              "col": 2,
+              "value": "X"
+            },
+            {
+              "row": 27,
+              "col": 9,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 28,
+              "col": 2,
+              "value": "Weekly x 2 weeks"
+            },
+            {
+              "row": 28,
+              "col": 4,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 28,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 28,
+              "col": 6,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 28,
+              "col": 7,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 28,
+              "col": 8,
+              "value": "b X"
+            },
+            {
+              "row": 28,
+              "col": 9,
+              "value": "b X"
+            },
+            {
+              "row": 29,
+              "col": 2,
+              "value": "Weekly x 2 weeks"
+            },
+            {
+              "row": 29,
+              "col": 4,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 29,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 29,
+              "col": 6,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 29,
+              "col": 7,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 29,
+              "col": 8,
+              "value": "b X"
+            },
+            {
+              "row": 29,
+              "col": 9,
+              "value": "b X"
+            },
+            {
+              "row": 30,
+              "col": 2,
+              "value": "3 X/week for 2 weeks"
+            },
+            {
+              "row": 30,
+              "col": 4,
+              "value": "3 X"
+            },
+            {
+              "row": 30,
+              "col": 5,
+              "value": "3 X"
+            },
+            {
+              "row": 30,
+              "col": 6,
+              "value": "3 X"
+            },
+            {
+              "row": 30,
+              "col": 7,
+              "value": "3 X"
+            },
+            {
+              "row": 30,
+              "col": 8,
+              "value": "3 X"
+            },
+            {
+              "row": 30,
+              "col": 9,
+              "value": "3 X"
+            },
+            {
+              "row": 30,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 31,
+              "col": 1,
+              "value": "3 for"
+            },
+            {
+              "row": 31,
+              "col": 2,
+              "value": "X/week 2 weeks"
+            },
+            {
+              "row": 31,
+              "col": 4,
+              "value": "3 X"
+            },
+            {
+              "row": 31,
+              "col": 5,
+              "value": "3 X"
+            },
+            {
+              "row": 31,
+              "col": 6,
+              "value": "3 X"
+            },
+            {
+              "row": 31,
+              "col": 7,
+              "value": "3 X"
+            },
+            {
+              "row": 31,
+              "col": 8,
+              "value": "3 X"
+            },
+            {
+              "row": 31,
+              "col": 9,
+              "value": "3 X"
+            },
+            {
+              "row": 31,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 32,
+              "col": 2,
+              "value": "Weekly x 2 weeks"
+            },
+            {
+              "row": 32,
+              "col": 4,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 32,
+              "col": 5,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 32,
+              "col": 6,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 32,
+              "col": 7,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 32,
+              "col": 8,
+              "value": "b X"
+            },
+            {
+              "row": 32,
+              "col": 9,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 32,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 33,
+              "col": 2,
+              "value": "a X"
+            },
+            {
+              "row": 33,
+              "col": 4,
+              "value": "a X"
+            },
+            {
+              "row": 33,
+              "col": 5,
+              "value": "a X"
+            },
+            {
+              "row": 33,
+              "col": 9,
+              "value": "c X"
+            },
+            {
+              "row": 34,
+              "col": 4,
+              "value": "3 X"
+            },
+            {
+              "row": 34,
+              "col": 5,
+              "value": "3 X"
+            },
+            {
+              "row": 34,
+              "col": 6,
+              "value": "3 X"
+            },
+            {
+              "row": 34,
+              "col": 7,
+              "value": "3 X"
+            },
+            {
+              "row": 34,
+              "col": 8,
+              "value": "3 X"
+            },
+            {
+              "row": 34,
+              "col": 9,
+              "value": "3 X"
+            },
+            {
+              "row": 35,
+              "col": 10,
+              "value": "X"
+            }
+          ]
+        }
+      ],
+      "footnotes": [
+        {
+          "marker": "*",
+          "text": "*Baseline assessments must occur within 2 weeks during the screening period.  The screening period is within 4 weeks of subject enrollment.  Baseline and screening period may occur simultaneously.",
+          "page": 25,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "same-page",
+          "targets": [
+            {
+              "page": 25,
+              "row": 1,
+              "col": 1,
+              "target": "column_header",
+              "cell_value": "-4 to 0*"
+            },
+            {
+              "page": 25,
+              "row": 1,
+              "col": 2,
+              "target": "column_header",
+              "cell_value": "-4 to 0*"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xa",
+          "text": "X a - Blood is collected in fasted state at least once (preferably twice) before investigational agent administration, once during weeks 3-6, and once at week 12 or at final visit if subject discontinues prematurely.  The two specimens prior to investigational agent may be drawn during baseline, or one may be drawn during baseline and one on study day 1 prior to administration of first dose of investigational agent.",
+          "page": 25,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "same-page",
+          "targets": [],
+          "value_cells": [],
+          "scope": "unlinked"
+        },
+        {
+          "marker": "Xb",
+          "text": "X b - Once during the week preferably at the first visit of the week.",
+          "page": 25,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "same-page",
+          "targets": [
+            {
+              "page": 25,
+              "row": 13,
+              "col": 4,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 13,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 13,
+              "col": 6,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 13,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 14,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 14,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 15,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 15,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 16,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 17,
+              "col": 4,
+              "target": "cell",
+              "cell_value": "I b X"
+            },
+            {
+              "page": 25,
+              "row": 17,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 17,
+              "col": 6,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 18,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 18,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 19,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 19,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 22,
+              "col": 4,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 22,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 22,
+              "col": 6,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 22,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 22,
+              "col": 9,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 24,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 24,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 26,
+              "col": 4,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 26,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 26,
+              "col": 6,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 26,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 27,
+              "col": 9,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 28,
+              "col": 4,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 28,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 28,
+              "col": 6,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 28,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 29,
+              "col": 4,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 29,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 29,
+              "col": 6,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 29,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 32,
+              "col": 4,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 32,
+              "col": 5,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 32,
+              "col": 6,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 32,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "b X"
+            },
+            {
+              "page": 25,
+              "row": 32,
+              "col": 9,
+              "target": "cell",
+              "cell_value": "b X"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xc",
+          "text": "X c - At the final scheduled study visit (last visit of week 12) or if the subjects discontinues prematurely.",
+          "page": 25,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "same-page",
+          "targets": [
+            {
+              "page": 25,
+              "row": 12,
+              "col": 9,
+              "target": "cell",
+              "cell_value": "c X"
+            },
+            {
+              "page": 25,
+              "row": 20,
+              "col": 9,
+              "target": "cell",
+              "cell_value": "c X"
+            },
+            {
+              "page": 25,
+              "row": 25,
+              "col": 9,
+              "target": "cell",
+              "cell_value": "c X"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xd",
+          "text": "X d - FEV 1 is only performed in those subjects suspected of having asthma.",
+          "page": 25,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "same-page",
+          "targets": [
+            {
+              "page": 25,
+              "row": 12,
+              "col": 0,
+              "target": "row_label",
+              "cell_value": "Physical exam/FEV d 1"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        }
+      ],
+      "detection": [
+        {
+          "table_id": "table-5",
+          "page": 25,
+          "score": 2.0,
+          "verdict": "select",
+          "signals": {
+            "R1_marks": 1.0,
+            "R2_footnotes": 0.5,
+            "R3_grid": 0.5
+          },
+          "mark_share": 0.928,
+          "gate": "header row 0: 9 timepoint labels",
+          "footnote_evidence": "1 block(s), markers ['*', 'Xa', 'Xb', 'Xc', 'Xd']"
+        }
+      ],
+      "review": {
+        "markers_in_table_without_definition": [],
+        "footnotes_never_used_in_table": [
+          "Xa"
+        ],
+        "orphan_positions": [],
+        "unmerged_fragment_warning": null
+      },
+      "interpretation": [
+        {
+          "status": "ok",
+          "model": "mistral-medium-latest",
+          "header_roles_applied": 2,
+          "rows_applied": 34,
+          "rows_unanswered": [],
+          "indices_invented": []
+        }
+      ]
+    }
+  ],
+  "review": {
+    "schedules_found": 1,
+    "near_miss_tables": [],
+    "footnote_blocks": {
+      "accept": 2,
+      "review": 1,
+      "discard": 2
+    },
+    "footnote_blocks_flagged": [
+      {
+        "page": 19,
+        "score": 3,
+        "markers": [
+          "for",
+          "by"
+        ],
+        "attached_to": null
+      }
+    ]
+  },
+  "table_scores": [
+    {
+      "table_id": "table-5",
+      "index": 4,
+      "page": 25,
+      "rows": 36,
+      "cols": 11,
+      "body_rows": 34,
+      "value_cols": 9,
+      "non_empty": 138,
+      "empty": 167,
+      "mark_share": 0.928,
+      "marks": 128,
+      "eligible": true,
+      "gate_why": "header row 0: 9 timepoint labels",
+      "fn_why": "1 block(s), markers ['*', 'Xa', 'Xb', 'Xc', 'Xd']",
+      "score": 2.0,
+      "signals": {
+        "R1_marks": 1.0,
+        "R2_footnotes": 0.5,
+        "R3_grid": 0.5
+      },
+      "verdict": "select"
+    },
+    {
+      "table_id": "table-8",
+      "index": 7,
+      "page": 52,
+      "rows": 41,
+      "cols": 12,
+      "body_rows": 38,
+      "value_cols": 11,
+      "non_empty": 164,
+      "empty": 253,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "header row 0: 12 timepoint labels",
+      "fn_why": "none",
+      "score": 0.5,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.5
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-9",
+      "index": 8,
+      "page": 53,
+      "rows": 45,
+      "cols": 12,
+      "body_rows": 42,
+      "value_cols": 11,
+      "non_empty": 181,
+      "empty": 280,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "header row 0: 12 timepoint labels",
+      "fn_why": "none",
+      "score": 0.5,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.5
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-10",
+      "index": 9,
+      "page": 54,
+      "rows": 9,
+      "cols": 12,
+      "body_rows": 6,
+      "value_cols": 11,
+      "non_empty": 43,
+      "empty": 23,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "header row 0: 12 timepoint labels",
+      "fn_why": "none",
+      "score": 0.5,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.5
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-1",
+      "index": 0,
+      "page": 3,
+      "rows": 26,
+      "cols": 1,
+      "body_rows": 26,
+      "value_cols": 0,
+      "non_empty": 0,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: 6 timepoint labels",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-2",
+      "index": 1,
+      "page": 4,
+      "rows": 45,
+      "cols": 3,
+      "body_rows": 11,
+      "value_cols": 1,
+      "non_empty": 9,
+      "empty": 2,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "header row 5: ordered numeric sequence [13, 16, 33]\u2026",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-3",
+      "index": 2,
+      "page": 5,
+      "rows": 28,
+      "cols": 3,
+      "body_rows": 27,
+      "value_cols": 2,
+      "non_empty": 53,
+      "empty": 1,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: ordered numeric sequence [15, 15, 15, 15, 15, 15]\u2026",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-4",
+      "index": 3,
+      "page": 6,
+      "rows": 39,
+      "cols": 2,
+      "body_rows": 39,
+      "value_cols": 1,
+      "non_empty": 39,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-6",
+      "index": 5,
+      "page": 48,
+      "rows": 7,
+      "cols": 3,
+      "body_rows": 6,
+      "value_cols": 2,
+      "non_empty": 6,
+      "empty": 6,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-7",
+      "index": 6,
+      "page": 48,
+      "rows": 2,
+      "cols": 3,
+      "body_rows": 1,
+      "value_cols": 2,
+      "non_empty": 2,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-11",
+      "index": 10,
+      "page": 55,
+      "rows": 33,
+      "cols": 14,
+      "body_rows": 0,
+      "value_cols": 13,
+      "non_empty": 0,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "header row 1: 10 timepoint labels",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-12",
+      "index": 11,
+      "page": 56,
+      "rows": 19,
+      "cols": 3,
+      "body_rows": 11,
+      "value_cols": 2,
+      "non_empty": 14,
+      "empty": 8,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "1 block(s), markers ['*']",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.5,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    }
+  ]
+}

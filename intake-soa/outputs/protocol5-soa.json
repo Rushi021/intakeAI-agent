@@ -1,0 +1,1470 @@
+{
+  "document": {
+    "filename": "protocol5.pdf",
+    "converter": "docling",
+    "convert_seconds": 0.0,
+    "pages": 61,
+    "tables": 13,
+    "text_items": 896,
+    "labels": [
+      {
+        "label": "text",
+        "count": 374
+      },
+      {
+        "label": "list_item",
+        "count": 158
+      },
+      {
+        "label": "section_header",
+        "count": 139
+      },
+      {
+        "label": "table",
+        "count": 10
+      },
+      {
+        "label": "footnote",
+        "count": 5
+      },
+      {
+        "label": "document_index",
+        "count": 3
+      },
+      {
+        "label": "caption",
+        "count": 3
+      },
+      {
+        "label": "picture",
+        "count": 1
+      }
+    ]
+  },
+  "schedules": [
+    {
+      "soa_id": "soa-1",
+      "pages": [
+        50
+      ],
+      "fragments": [
+        {
+          "table_id": "table-12",
+          "page": 50,
+          "grid_size": [
+            32,
+            12
+          ],
+          "header_rows": [
+            {
+              "row_index": 0,
+              "cells": [
+                "Study Phase",
+                "Pre- intake Screening",
+                "Intake Screening",
+                "Screening Infusions",
+                "Baseline Infusions",
+                "Baseline Infusions",
+                "Treatment Infusions",
+                "Treatment Infusions",
+                "Treatment Infusions",
+                "Treatment Infusions",
+                "Dis- charge",
+                "Follow- up"
+              ],
+              "role": "study_period",
+              "role_source": "model"
+            },
+            {
+              "row_index": 1,
+              "cells": [
+                "Study day",
+                "Up to -35",
+                "-15* to -9",
+                "-6",
+                "-2",
+                "-1",
+                "7",
+                "8",
+                "12",
+                "13",
+                "17",
+                "31"
+              ],
+              "role": "study_day",
+              "role_source": "model"
+            }
+          ],
+          "label_cols": [
+            0
+          ],
+          "columns": [
+            {
+              "col_index": 1,
+              "header_path": [
+                "Pre- intake Screening",
+                "Up to -35"
+              ]
+            },
+            {
+              "col_index": 2,
+              "header_path": [
+                "Intake Screening",
+                "-15* to -9"
+              ]
+            },
+            {
+              "col_index": 3,
+              "header_path": [
+                "Screening Infusions",
+                "-6"
+              ]
+            },
+            {
+              "col_index": 4,
+              "header_path": [
+                "Baseline Infusions",
+                "-2"
+              ]
+            },
+            {
+              "col_index": 5,
+              "header_path": [
+                "Baseline Infusions",
+                "-1"
+              ]
+            },
+            {
+              "col_index": 6,
+              "header_path": [
+                "Treatment Infusions",
+                "7"
+              ]
+            },
+            {
+              "col_index": 7,
+              "header_path": [
+                "Treatment Infusions",
+                "8"
+              ]
+            },
+            {
+              "col_index": 8,
+              "header_path": [
+                "Treatment Infusions",
+                "12"
+              ]
+            },
+            {
+              "col_index": 9,
+              "header_path": [
+                "Treatment Infusions",
+                "13"
+              ]
+            },
+            {
+              "col_index": 10,
+              "header_path": [
+                "Dis- charge",
+                "17"
+              ]
+            },
+            {
+              "col_index": 11,
+              "header_path": [
+                "Follow- up",
+                "31"
+              ]
+            }
+          ],
+          "rows": [
+            {
+              "row_index": 2,
+              "label": "Informed consent",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 3,
+              "label": "Locator form/Demographics",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 4,
+              "label": "Cocaine use by timeline follow-back",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 5,
+              "label": "Breathalyzer test",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 6,
+              "label": "12-lead ECG",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 7,
+              "label": "SCID",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 8,
+              "label": "Medical History",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 9,
+              "label": "Physical Exam (complete)",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 10,
+              "label": "Physical Exam (brief)",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 11,
+              "label": "ASI-Lite",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 12,
+              "label": "Vital Signs",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 13,
+              "label": "Chemistries plus liver function tests**",
+              "kind": "activity",
+              "kind_source": "model",
+              "markers": [
+                "**"
+              ]
+            },
+            {
+              "row_index": 14,
+              "label": "Hematology",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 15,
+              "label": "Pregnancy Test***",
+              "kind": "activity",
+              "kind_source": "model",
+              "markers": [
+                "***"
+              ]
+            },
+            {
+              "row_index": 16,
+              "label": "Infectious disease serology",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 17,
+              "label": "Plasma alcohol",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 18,
+              "label": "Urine toxicology screen",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 19,
+              "label": "POMS, BSCS",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 20,
+              "label": "Cognitive assessments****",
+              "kind": "activity",
+              "kind_source": "model",
+              "markers": [
+                "****"
+              ]
+            },
+            {
+              "row_index": 21,
+              "label": "Atomoxetine or placebo",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 22,
+              "label": "Atomoxetine blood levels",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 23,
+              "label": "Adverse Events",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 24,
+              "label": "Cocaine Infusion Session #",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 25,
+              "label": "Saline/20 mg cocaine/40 mg cocaine i.v. 20 mg cocaine i.v.",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 26,
+              "label": "40 mg cocaine i.v.",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 27,
+              "label": "VAS",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 28,
+              "label": "ARCI",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 29,
+              "label": "Continuous BP, HR, ECG monitoring",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 30,
+              "label": "BPRS",
+              "kind": "activity",
+              "kind_source": "model"
+            },
+            {
+              "row_index": 31,
+              "label": "Cocaine Blood PK",
+              "kind": "activity",
+              "kind_source": "model"
+            }
+          ],
+          "cells": [
+            {
+              "row": 2,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 5,
+              "col": 2,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 2,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 3,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 4,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 5,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 6,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 7,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 8,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 9,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 6,
+              "col": 11,
+              "value": "X"
+            },
+            {
+              "row": 7,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 8,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 9,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 9,
+              "col": 11,
+              "value": "X"
+            },
+            {
+              "row": 10,
+              "col": 2,
+              "value": "X"
+            },
+            {
+              "row": 10,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 11,
+              "col": 2,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 2,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 3,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 4,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 5,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 6,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 7,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 8,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 9,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 12,
+              "col": 11,
+              "value": "X"
+            },
+            {
+              "row": 13,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 13,
+              "col": 2,
+              "value": "X"
+            },
+            {
+              "row": 13,
+              "col": 9,
+              "value": "X"
+            },
+            {
+              "row": 13,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 13,
+              "col": 11,
+              "value": "X"
+            },
+            {
+              "row": 14,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 14,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 14,
+              "col": 11,
+              "value": "X"
+            },
+            {
+              "row": 15,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 15,
+              "col": 2,
+              "value": "X"
+            },
+            {
+              "row": 15,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 15,
+              "col": 11,
+              "value": "X"
+            },
+            {
+              "row": 16,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 17,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 18,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 18,
+              "col": 2,
+              "value": "X"
+            },
+            {
+              "row": 18,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 18,
+              "col": 11,
+              "value": "X"
+            },
+            {
+              "row": 19,
+              "col": 2,
+              "value": "X a",
+              "markers": [
+                "a"
+              ]
+            },
+            {
+              "row": 21,
+              "col": 6,
+              "value": "b X",
+              "markers": [
+                "b"
+              ]
+            },
+            {
+              "row": 22,
+              "col": 7,
+              "value": "f X",
+              "markers": [
+                "f"
+              ]
+            },
+            {
+              "row": 22,
+              "col": 9,
+              "value": "X"
+            },
+            {
+              "row": 23,
+              "col": 1,
+              "value": "X"
+            },
+            {
+              "row": 23,
+              "col": 2,
+              "value": "X"
+            },
+            {
+              "row": 23,
+              "col": 3,
+              "value": "X"
+            },
+            {
+              "row": 23,
+              "col": 4,
+              "value": "X"
+            },
+            {
+              "row": 23,
+              "col": 5,
+              "value": "X"
+            },
+            {
+              "row": 23,
+              "col": 6,
+              "value": "X"
+            },
+            {
+              "row": 23,
+              "col": 7,
+              "value": "X"
+            },
+            {
+              "row": 23,
+              "col": 8,
+              "value": "X"
+            },
+            {
+              "row": 23,
+              "col": 9,
+              "value": "X"
+            },
+            {
+              "row": 23,
+              "col": 10,
+              "value": "X"
+            },
+            {
+              "row": 23,
+              "col": 11,
+              "value": "X"
+            },
+            {
+              "row": 24,
+              "col": 3,
+              "value": "1&2"
+            },
+            {
+              "row": 24,
+              "col": 4,
+              "value": "3"
+            },
+            {
+              "row": 24,
+              "col": 5,
+              "value": "4"
+            },
+            {
+              "row": 24,
+              "col": 6,
+              "value": "5"
+            },
+            {
+              "row": 24,
+              "col": 7,
+              "value": "6"
+            },
+            {
+              "row": 24,
+              "col": 8,
+              "value": "7"
+            },
+            {
+              "row": 24,
+              "col": 9,
+              "value": "8"
+            },
+            {
+              "row": 25,
+              "col": 3,
+              "value": "X"
+            },
+            {
+              "row": 25,
+              "col": 4,
+              "value": "X"
+            },
+            {
+              "row": 25,
+              "col": 6,
+              "value": "X"
+            },
+            {
+              "row": 25,
+              "col": 8,
+              "value": "X"
+            },
+            {
+              "row": 26,
+              "col": 5,
+              "value": "X"
+            },
+            {
+              "row": 26,
+              "col": 7,
+              "value": "X"
+            },
+            {
+              "row": 26,
+              "col": 9,
+              "value": "X"
+            },
+            {
+              "row": 27,
+              "col": 2,
+              "value": "X c",
+              "markers": [
+                "c"
+              ]
+            },
+            {
+              "row": 27,
+              "col": 3,
+              "value": "X"
+            },
+            {
+              "row": 27,
+              "col": 4,
+              "value": "X"
+            },
+            {
+              "row": 27,
+              "col": 5,
+              "value": "X"
+            },
+            {
+              "row": 27,
+              "col": 6,
+              "value": "X"
+            },
+            {
+              "row": 27,
+              "col": 7,
+              "value": "X"
+            },
+            {
+              "row": 27,
+              "col": 8,
+              "value": "X"
+            },
+            {
+              "row": 27,
+              "col": 9,
+              "value": "X"
+            },
+            {
+              "row": 28,
+              "col": 2,
+              "value": "d X",
+              "markers": [
+                "d"
+              ]
+            },
+            {
+              "row": 29,
+              "col": 3,
+              "value": "X"
+            },
+            {
+              "row": 29,
+              "col": 4,
+              "value": "X"
+            },
+            {
+              "row": 29,
+              "col": 5,
+              "value": "X"
+            },
+            {
+              "row": 29,
+              "col": 6,
+              "value": "X"
+            },
+            {
+              "row": 29,
+              "col": 7,
+              "value": "X"
+            },
+            {
+              "row": 29,
+              "col": 8,
+              "value": "X"
+            },
+            {
+              "row": 29,
+              "col": 9,
+              "value": "X"
+            },
+            {
+              "row": 30,
+              "col": 2,
+              "value": "X e",
+              "markers": [
+                "e"
+              ]
+            },
+            {
+              "row": 30,
+              "col": 3,
+              "value": "X"
+            },
+            {
+              "row": 30,
+              "col": 4,
+              "value": "X"
+            },
+            {
+              "row": 30,
+              "col": 5,
+              "value": "X"
+            },
+            {
+              "row": 30,
+              "col": 6,
+              "value": "X"
+            },
+            {
+              "row": 30,
+              "col": 7,
+              "value": "X"
+            },
+            {
+              "row": 30,
+              "col": 8,
+              "value": "X"
+            },
+            {
+              "row": 30,
+              "col": 9,
+              "value": "X"
+            },
+            {
+              "row": 31,
+              "col": 5,
+              "value": "X"
+            },
+            {
+              "row": 31,
+              "col": 7,
+              "value": "X"
+            },
+            {
+              "row": 31,
+              "col": 9,
+              "value": "X"
+            }
+          ]
+        }
+      ],
+      "footnotes": [
+        {
+          "marker": "*",
+          "text": "*Days -15 through -9 are allotted for washout of cocaine after admission.  Subjects' urine will be tested daily to document when it becomes negative for cocaine.",
+          "page": 51,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break",
+          "targets": [],
+          "value_cells": [],
+          "scope": "unlinked"
+        },
+        {
+          "marker": "**",
+          "text": "** Blood chemistries, including liver function tests, will be performed at outpatient and inpatient screening, on days 6 and 13, at discharge (day 17) and at follow-up (day 31).",
+          "page": 51,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break",
+          "targets": [
+            {
+              "page": 50,
+              "row": 13,
+              "col": 0,
+              "target": "row_label",
+              "cell_value": "Chemistries plus liver function tests**"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "***",
+          "text": "*** Pregnancy test at intake screening should be done within 72 hours before the first screening cocaine infusion.",
+          "page": 51,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break",
+          "targets": [
+            {
+              "page": 50,
+              "row": 15,
+              "col": 0,
+              "target": "row_label",
+              "cell_value": "Pregnancy Test***"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "****",
+          "text": "**** Cognitive assessments will be performed on day -7 and on day 11.",
+          "page": 51,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break",
+          "targets": [
+            {
+              "page": 50,
+              "row": 20,
+              "col": 0,
+              "target": "row_label",
+              "cell_value": "Cognitive assessments****"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xa",
+          "text": "X a - POMS, BSCS will be performed at intake and then every other day.",
+          "page": 51,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break",
+          "targets": [
+            {
+              "page": 50,
+              "row": 19,
+              "col": 2,
+              "target": "cell",
+              "cell_value": "X a"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xb",
+          "text": "b X - atomoxetine will be administered at 20 mg q.d. on days 0 and 1, 40 mg q.d. on days 2 and 3, 80 mg q.d. on days 4-8 and 100 mg q.d. on days 9-13.",
+          "page": 51,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break",
+          "targets": [
+            {
+              "page": 50,
+              "row": 21,
+              "col": 6,
+              "target": "cell",
+              "cell_value": "b X"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xc",
+          "text": "X c - VAS will be performed on days -10, -9, and on all infusion days.",
+          "page": 51,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break",
+          "targets": [
+            {
+              "page": 50,
+              "row": 27,
+              "col": 2,
+              "target": "cell",
+              "cell_value": "X c"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xd",
+          "text": "d X - ARCI  will be performed on days -10, -9, and on all non-infusion days.",
+          "page": 51,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break",
+          "targets": [
+            {
+              "page": 50,
+              "row": 28,
+              "col": 2,
+              "target": "cell",
+              "cell_value": "d X"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xe",
+          "text": "X e - BPRS will be administered on baseline, every day during treatment with atomoxetine and on the days of all cocaine infusions.",
+          "page": 51,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break",
+          "targets": [
+            {
+              "page": 50,
+              "row": 30,
+              "col": 2,
+              "target": "cell",
+              "cell_value": "X e"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        },
+        {
+          "marker": "Xf",
+          "text": "X f - atomoxetine blood levels will be determined on days 6, 8, 11 and 13.",
+          "page": 51,
+          "verdict": "accept",
+          "score": 6,
+          "attach": "page-break",
+          "targets": [
+            {
+              "page": 50,
+              "row": 22,
+              "col": 7,
+              "target": "cell",
+              "cell_value": "f X"
+            }
+          ],
+          "value_cells": [],
+          "scope": "cell_marker"
+        }
+      ],
+      "detection": [
+        {
+          "table_id": "table-12",
+          "page": 50,
+          "score": 2.0,
+          "verdict": "select",
+          "signals": {
+            "R1_marks": 1.0,
+            "R2_footnotes": 0.5,
+            "R3_grid": 0.5
+          },
+          "mark_share": 0.935,
+          "gate": "header row 0: 9 timepoint labels",
+          "footnote_evidence": "1 block(s), markers ['*', '**', '***', '****', 'Xa', 'Xb', 'Xc', 'Xd', 'Xe', 'Xf']"
+        }
+      ],
+      "review": {
+        "markers_in_table_without_definition": [],
+        "footnotes_never_used_in_table": [
+          "*"
+        ],
+        "orphan_positions": [],
+        "unmerged_fragment_warning": null
+      },
+      "interpretation": [
+        {
+          "status": "ok",
+          "model": "mistral-medium-latest",
+          "header_roles_applied": 2,
+          "rows_applied": 30,
+          "rows_unanswered": [],
+          "indices_invented": []
+        }
+      ]
+    }
+  ],
+  "review": {
+    "schedules_found": 1,
+    "near_miss_tables": [],
+    "footnote_blocks": {
+      "accept": 1,
+      "review": 1,
+      "discard": 2
+    },
+    "footnote_blocks_flagged": [
+      {
+        "page": 10,
+        "score": 3,
+        "markers": [
+          "POPULATION",
+          "TREATMENTS",
+          "ASSESSMENTS"
+        ],
+        "attached_to": null
+      }
+    ]
+  },
+  "table_scores": [
+    {
+      "table_id": "table-12",
+      "index": 11,
+      "page": 50,
+      "rows": 32,
+      "cols": 12,
+      "body_rows": 30,
+      "value_cols": 11,
+      "non_empty": 107,
+      "empty": 223,
+      "mark_share": 0.935,
+      "marks": 100,
+      "eligible": true,
+      "gate_why": "header row 0: 9 timepoint labels",
+      "fn_why": "1 block(s), markers ['*', '**', '***', '****', 'Xa', 'Xb', 'Xc', 'Xd', 'Xe', 'Xf']",
+      "score": 2.0,
+      "signals": {
+        "R1_marks": 1.0,
+        "R2_footnotes": 0.5,
+        "R3_grid": 0.5
+      },
+      "verdict": "select"
+    },
+    {
+      "table_id": "table-2",
+      "index": 1,
+      "page": 4,
+      "rows": 44,
+      "cols": 5,
+      "body_rows": 43,
+      "value_cols": 4,
+      "non_empty": 162,
+      "empty": 10,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "header row 0: 3 timepoint labels",
+      "fn_why": "none",
+      "score": 0.5,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.5
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-13",
+      "index": 12,
+      "page": 51,
+      "rows": 10,
+      "cols": 16,
+      "body_rows": 8,
+      "value_cols": 15,
+      "non_empty": 44,
+      "empty": 76,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "header row 0: 12 timepoint labels",
+      "fn_why": "none",
+      "score": 0.5,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.5
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-1",
+      "index": 0,
+      "page": 3,
+      "rows": 44,
+      "cols": 3,
+      "body_rows": 44,
+      "value_cols": 2,
+      "non_empty": 86,
+      "empty": 2,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: ordered numeric sequence [1, 2, 3, 4, 4, 4]\u2026",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-3",
+      "index": 2,
+      "page": 5,
+      "rows": 22,
+      "cols": 4,
+      "body_rows": 22,
+      "value_cols": 3,
+      "non_empty": 64,
+      "empty": 2,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: ordered numeric sequence [14, 14, 14, 14, 14, 14]\u2026",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-4",
+      "index": 3,
+      "page": 6,
+      "rows": 40,
+      "cols": 2,
+      "body_rows": 40,
+      "value_cols": 1,
+      "non_empty": 40,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-5",
+      "index": 4,
+      "page": 7,
+      "rows": 6,
+      "cols": 2,
+      "body_rows": 6,
+      "value_cols": 1,
+      "non_empty": 6,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-6",
+      "index": 5,
+      "page": 24,
+      "rows": 8,
+      "cols": 4,
+      "body_rows": 0,
+      "value_cols": 3,
+      "non_empty": 0,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: 7 timepoint labels",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-7",
+      "index": 6,
+      "page": 29,
+      "rows": 29,
+      "cols": 2,
+      "body_rows": 28,
+      "value_cols": 1,
+      "non_empty": 28,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-8",
+      "index": 7,
+      "page": 30,
+      "rows": 23,
+      "cols": 2,
+      "body_rows": 22,
+      "value_cols": 1,
+      "non_empty": 22,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": true,
+      "gate_why": "column 0: ordered numeric sequence [62, 63, 64, 65, 66, 68]\u2026",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-9",
+      "index": 8,
+      "page": 41,
+      "rows": 7,
+      "cols": 2,
+      "body_rows": 6,
+      "value_cols": 1,
+      "non_empty": 6,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-10",
+      "index": 9,
+      "page": 45,
+      "rows": 2,
+      "cols": 3,
+      "body_rows": 1,
+      "value_cols": 2,
+      "non_empty": 2,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    },
+    {
+      "table_id": "table-11",
+      "index": 10,
+      "page": 45,
+      "rows": 4,
+      "cols": 3,
+      "body_rows": 2,
+      "value_cols": 2,
+      "non_empty": 4,
+      "empty": 0,
+      "mark_share": 0.0,
+      "marks": 0,
+      "eligible": false,
+      "gate_why": "no ordered timepoint axis",
+      "fn_why": "none",
+      "score": 0.0,
+      "signals": {
+        "R1_marks": 0.0,
+        "R2_footnotes": 0.0,
+        "R3_grid": 0.0
+      },
+      "verdict": "reject"
+    }
+  ]
+}
