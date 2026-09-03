@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schedule of Activities — extraction review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="shell">
+
+  <aside class="rail">
+    <h1 class="rail__title">Schedule of Activities
+      <span>Find and extract the SoA from any clinical trial protocol.</span>
+    </h1>
+
+    <label class="drop" id="drop">
+      <input type="file" id="picker" accept="application/pdf,.pdf" multiple>
+      <b>Add protocol PDFs</b>
+      <small>Drop them here, or click to browse</small>
+    </label>
+
+    <section class="queue">
+      <div class="queue__head"><span id="queueCount">No documents yet</span><span id="modelState"></span></div>
+      <div id="queue"></div>
+    </section>
+
+    <button class="run" id="run" disabled>Run agent</button>
+
+    <p class="rail__note" id="railNote"></p>
+  </aside>
+
+  <main class="preview">
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <div class="panel" id="panel">
+      <div class="empty">
+        <b>Nothing extracted yet</b>
+        <span>Add one or more protocols, then run the agent. Each document is parsed in parallel.</span>
+      </div>
+    </div>
+  </main>
+
+</div>
+<script src="/app.js"></script>
+</body>
+</html>
