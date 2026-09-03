@@ -1,0 +1,19 @@
+# Layout + table structure. The primary reader; see README "Tools evaluated".
+docling>=2.0
+
+# Character-level second reader: font size and baseline per glyph, which Docling does not expose.
+# Used only for footnote-marker superscript detection (soa/linkage.py).
+pdfplumber>=0.11
+
+# UI
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+
+# Interpretation layer (Mistral). Optional at runtime — the pipeline runs without an API key.
+requests>=2.31
+
+# Notebook used for the original exploration; not needed to run the tool.
+jupyter>=1.0
+ipykernel>=6.0
+pandas>=2.0
