@@ -1,24 +1,120 @@
-# Intake AI — Take-Home 1a
+# Intake AI — Take-Home Assignments
 
-An agent that reads a study specification and builds it into an eSource
-platform by driving the platform's own UI, with a human in the loop.
+This repo contains two independent deliverables:
 
-**Status: pass 2 — the agent perceives, decides, acts, verifies and escalates.
-It writes to the platform.** No end-to-end run against a live page has been
+| Part | Folder | Assignment | What it does |
+|------|--------|------------|--------------|
+| **1** | [`intake-agent/`](intake-agent/) | Take-Home 1a | Chrome extension — builds a study IR into an eSource platform |
+| **2** | [`intake-soa/`](intake-soa/) | Take-Home 1b | Protocol PDF → Schedule of Activities extraction pipeline, with an upload UI |
+
+Part 1 status: pass 2 — the agent perceives, decides, acts, verifies and escalates.
+It writes to the platform. No end-to-end run against a live page has been
 performed yet; see [What is and is not proven](#what-is-and-is-not-proven).
+
+Part 2 status: the pipeline runs end to end and locates the SoA in all five sample
+protocols. Verification is detection-level, not cell-by-cell; the known defects are
+listed in [`intake-soa/README.md`](intake-soa/README.md).
 
 ```
 .
-├── intake-agent/       the deliverable — Chrome extension (TypeScript)
+├── intake-agent/       Part 1 — Chrome extension (TypeScript)
 │                       architecture in intake-agent/ARCHITECTURE.md
 │                       design in intake-agent/PASS2.md
+├── intake-soa/         Part 2 — SoA extraction from protocol PDFs (Python)
+│                       architecture and schema in intake-soa/README.md
+│                       design record in intake-soa/footnote_detect.md
 ├── intake-takehome-2/  supplied material — the eSource mock and the study IR
+├── takehome-1b/        supplied material — five protocol PDFs (local only, gitignored)
 └── *.pdf               the assignment briefs
 ```
 
 ---
 
-## Running the pipeline
+## Part 2 — Running the pipeline
+
+Extract the **Schedule of Activities** from any clinical trial protocol PDF: find the table without
+being told where it is, extract it faithfully (rows, columns, verbatim cell values, hierarchy on both
+axes), and bind each footnote to the cells it modifies.
+
+Python 3.10+ (3.12 used here). Full architecture, output schema, tool evaluation and known defects:
+[`intake-soa/README.md`](intake-soa/README.md).
+
+### 1 · Install
+
+```bash
+cd intake-soa
+python3 -m venv .venv
+source .venv/bin/activate            # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+First run downloads Docling's layout and table-structure models (a few hundred MB, cached after).
+
+### 2 · Provide a Mistral API key — optional
+
+```bash
+export MISTRAL_API_KEY=...
+```
+
+Looked up as `$MISTRAL_API_KEY` → `intake-soa/.env` → `intake-agent/.env`, so **the key you already
+set up for Part 1 is picked up automatically**. Without one the pipeline still runs end to end; only
+the header-role and row-grouping labels fall back to rules, and it says so in the UI.
+
+The model is deliberately kept away from the data: it receives one table's header rows and row labels
+and nothing else — never a cell value, never the protocol prose — and its answer is validated
+index-by-index before use. Nothing it returns can drop a row or a visit.
+
+### 3 · Run the UI
+
+```bash
+python -m soa.server                 # http://127.0.0.1:8000
+```
+
+Drag in one or more protocol PDFs, remove any you did not mean to add, press **Run agent**.
+Documents are converted in parallel (4 at a time). Each finished document gets its own tab showing:
+
+- the layout inventory Docling produced for that file — pages, tables, and every element label with
+  its count;
+- each Schedule of Activities it found, as a grid with sticky headers, category rows drawn as
+  structure, and cell values verbatim;
+- the footnotes, with **click a marker to light up every cell it modifies**, and click a footnote to
+  do the reverse — the check that a linkage is actually right;
+- a review queue of everything the tool was unsure about, and the raw JSON to download.
+
+It works on a protocol it has never seen; nothing in the UI is pre-computed.
+
+### 4 · Run headless
+
+```bash
+python run_corpus.py                 # every PDF in ../takehome-1b/ -> outputs/<name>-soa.json
+python run_corpus.py --no-model      # rules only, no API key needed
+python run_corpus.py protocol9       # one document
+python test_soa.py                   # smoke check, seconds, no PDF conversion
+```
+
+The committed structured output in [`intake-soa/outputs/`](intake-soa/outputs/) is produced by
+exactly this script — all five protocols, nothing hand-edited.
+
+Protocol PDFs must exist locally in `takehome-1b/` (from `takehome-1b.zip`; gitignored) for the
+headless scripts. The UI needs no such thing — upload anything.
+
+### What it produces
+
+| doc | SoA pages | fragments | rows | cols | footnotes | linkages |
+|---|---|---|---|---|---|---|
+| protocol1 | 53–54 | 2 → merged | 56 | 16 | 4 | 5 |
+| protocol5 | 50 | 1 | 30 | 11 | 10 | 9 |
+| protocol9 | 26–28 | 3 → merged | 39 | 33 | 4 | 3 |
+| protocol12 | 48 | 1 | 40 | **1** | 12 | 12 |
+| protocol15 | 25 | 1 | 34 | 9 | 5 | 47 |
+
+Runtime is 35s–4min per document; Docling conversion dominates. protocol12's column count is a known
+defect, not a typo — Docling parses that SoA as 42×2 and the visit columns collapse. That and the
+rest of the failure modes are in [`intake-soa/README.md`](intake-soa/README.md).
+
+---
+
+## Part 1 — Running the pipeline
 
 Two terminals. Node 18+ for the mock, Node 22+ to run the agent's tests.
 
