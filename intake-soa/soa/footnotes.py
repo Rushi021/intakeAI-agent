@@ -2,7 +2,7 @@
 
 Docling's `footnote` layout label is trained on journal-style PDFs and undercounts the small-font
 legend blocks under SoA tables badly (4 hits across the whole corpus, most of them wrong). So the
-label is ignored entirely and blocks are scored on structure. Design: ../footnote_detect.md §1-2.
+label is ignored entirely and blocks are scored on structure.
 
 No sponsor string, template header, or section title is matched anywhere in this module.
 """

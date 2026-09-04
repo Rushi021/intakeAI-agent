@@ -3,7 +3,7 @@
 Docling gives table structure and cell text but drops most superscripts, so cell-text matching
 systematically under-reports. This module reads the same page a second time with pdfplumber at the
 character level, finds superscript glyphs by font size *and* raised baseline, and maps each one onto
-the Docling cell whose bbox contains it. Design: ../footnote_detect.md §3.
+the Docling cell whose bbox contains it.
 
 Why two conditions and not one: on protocol1's SoA page the body font is 9pt and the superscripts are
 8pt — but the column-header text ("VISIT", "WEEK", "ACTIVITY") is 7-8pt too. Size alone flags the

@@ -81,6 +81,32 @@ export const CONFIG: Config = {
 /** Whether this build has a key, for the UI to report. Never the key itself. */
 export const hasKey = (): boolean => CONFIG.apiKey !== '';
 
+/**
+ * Cheaper models first after the requested one fails a tier check.
+ * A free-tier key 403s on `mistral-large-latest`; small is in that catalog.
+ */
+const TIER_FALLBACKS = ['mistral-small-latest', 'mistral-medium-latest', 'open-mistral-nemo', 'mistral-large-latest'];
+
+/** Once a model answers, keep using it for the rest of this panel document. */
+let stickyModel: string | undefined;
+export const activeModel = (): string => stickyModel ?? CONFIG.model;
+
+/**
+ * Sticky is an optimization — skip re-probing every call once a model is
+ * known to work — never a promise to keep using a model that has started
+ * failing. A tier block that shows up mid-session (the account's eligibility
+ * changed, or the earlier success was itself a fluke) still has to fall
+ * through to the rest of the ladder, or one bad call turns into every
+ * remaining question in the session failing outright.
+ */
+const modelsToTry = (preferred: string): string[] => {
+  if (stickyModel) return [stickyModel, ...TIER_FALLBACKS.filter((m) => m !== stickyModel)];
+  return [preferred, ...TIER_FALLBACKS.filter((m) => m !== preferred)];
+};
+
+const isTierBlock = (status: number, desc: string): boolean =>
+  status === 403 && /subscription tier|tier_not_allowed|not available in your/i.test(desc);
+
 // ── The one call everything else uses ───────────────────────────────────────
 
 export async function chat(msgs: Msg[], opts: ChatOptions = {}, cfg: Config = CONFIG): Promise<Reply> {
@@ -91,23 +117,50 @@ export async function chat(msgs: Msg[], opts: ChatOptions = {}, cfg: Config = CO
     );
   }
 
-  const res = await fetch(spec.endpoint, {
-    method: 'POST',
-    headers: spec.headers(cfg.apiKey),
-    body: JSON.stringify(spec.body(cfg, msgs, opts)),
-    // A hung request must not stall a build. AbortSignal.timeout is stdlib.
-    signal: opts.signal ?? AbortSignal.timeout(60_000),
-  });
+  const queue = modelsToTry(cfg.model);
+  let lastDesc = '';
+  for (let i = 0; i < queue.length; i++) {
+    const model = queue[i];
+    const res = await fetch(spec.endpoint, {
+      method: 'POST',
+      headers: spec.headers(cfg.apiKey),
+      body: JSON.stringify(spec.body({ ...cfg, model }, msgs, opts)),
+      // A hung request must not stall a build. AbortSignal.timeout is stdlib.
+      signal: opts.signal ?? AbortSignal.timeout(60_000),
+    });
 
-  if (!res.ok) throw new Error(await describe(res, spec.label));
-  return spec.parse(await res.json());
+    if (!res.ok) {
+      lastDesc = await describe(res, spec.label);
+      // Only a tier block is worth another model. Anything else — a bad key, a
+      // rate limit, a server error — would fail identically on every entry in
+      // the ladder, and retrying it four times just delays the escalation.
+      if (isTierBlock(res.status, lastDesc) && i < queue.length - 1) continue;
+      throw new Error(lastDesc);
+    }
+    const reply = spec.parse(await res.json());
+    stickyModel = model;
+    return reply;
+  }
+  throw new Error(lastDesc || `${spec.label} could not complete the request.`);
 }
 
 /** Readable failures, and never an echo of the key. */
 async function describe(res: Response, label: string): Promise<string> {
   const detail = await res.text().catch(() => '');
-  const msg = detail.slice(0, 300);
-  if (res.status === 401 || res.status === 403) return `${label} rejected the API key (${res.status}).`;
+  let parsed: { message?: string; type?: string } = {};
+  try {
+    parsed = JSON.parse(detail);
+  } catch {
+    /* body is not JSON */
+  }
+  const msg = (parsed.message || detail).slice(0, 300);
+  if (res.status === 401) return `${label} rejected the API key (401).`;
+  if (res.status === 403) {
+    if (parsed.type === 'tier_not_allowed' || /subscription tier|not available in your/i.test(msg)) {
+      return `${label} cannot use this model (403): ${msg}`;
+    }
+    return `${label} forbidden (403)${msg ? `: ${msg}` : ''}.`;
+  }
   if (res.status === 429) return `${label} rate limit hit (429). Wait, or use a smaller model.`;
   return `${label} error ${res.status}${msg ? `: ${msg}` : ''}`;
 }

@@ -2,7 +2,7 @@
 
 A protocol may hold more than one SoA (main + sub-study + PK + long-term extension), so this returns
 every table above threshold, never "the top one". Structure is scored; headings, captions and sponsor
-templates are never matched. Design: ../footnote_detect.md §6.
+templates are never matched.
 """
 from __future__ import annotations
 

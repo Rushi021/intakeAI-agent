@@ -28,10 +28,10 @@
   <section id="gate-wrap" hidden>
     <h2>Needs a decision <span id="gate-n" class="muted"></span></h2>
     <p class="muted">
-      One card per <b>question</b>, not per field — the first three single-selects
-      that fail to resolve are one decision, not three. Nothing on a card was
-      built: an escalated item is never committed and then corrected, it is
-      never committed at all. Answer, then <b>Resume</b>.
+      One card per <b>kind of problem</b>, not per field. Each card says why the
+      agent stopped, what the model did with it, and whether you can settle it
+      by picking a control. Nothing on a card was built: an escalated item is
+      never committed and then corrected. Then <b>Resume</b>.
     </p>
     <div id="gate"></div>
     <div class="center"><button id="resume" class="primary" hidden>Resume</button></div>
@@ -41,7 +41,8 @@
     <h2>Progress</h2>
     <p class="muted">
       Derived from the ledger on every render, never stored, so it cannot drift
-      from what was actually built. Click an escalated row to jump to its card.
+      from what was actually built. Escalated rows show the reason; click one
+      to open that page on the platform and highlight the issue here.
     </p>
     <div id="tree"></div>
   </section>

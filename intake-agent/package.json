@@ -12,6 +12,7 @@
   "devDependencies": {
     "@types/chrome": "^0.0.287",
     "@types/node": "^22.20.1",
+    "playwright": "^1.62.1",
     "typescript": "^5.7.2",
     "vite": "^6.0.5"
   }

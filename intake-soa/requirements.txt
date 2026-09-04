@@ -1,4 +1,4 @@
-# Layout + table structure. The primary reader; see README "Tools evaluated".
+# Layout + table structure. The primary reader; see ARCHITECTURE.md "Tools evaluated".
 docling>=2.0
 
 # Character-level second reader: font size and baseline per glyph, which Docling does not expose.
@@ -17,3 +17,7 @@ requests>=2.31
 jupyter>=1.0
 ipykernel>=6.0
 pandas>=2.0
+
+# The "Extractor Agent Result" page (streamlit_app.py) — displays the five committed outputs.
+# Not needed for the FastAPI review tool or the headless corpus run.
+streamlit>=1.60

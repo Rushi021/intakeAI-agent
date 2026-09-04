@@ -35,6 +35,11 @@ export type CompactNode = {
   bbox?: [number, number, number, number]; // x, y, w, h
   depth: number;
   dialog?: Ref; // ref of the enclosing dialog, when inside one
+  /** The landmark this node sits in — 'banner', 'navigation', 'main', … .
+   *  Chrome and content are otherwise indistinguishable by name alone, and
+   *  "the one action offered in the content area" is the most portable
+   *  description of an add control there is. */
+  region?: string;
 };
 
 export type Snapshot = {
@@ -69,10 +74,16 @@ const CONTEXT = new Set([
   'progressbar', 'banner', 'main', 'navigation', 'form', 'region',
 ]);
 
+/** ARIA landmarks. The page's own division of chrome from content. */
+const LANDMARKS = new Set([
+  'banner', 'navigation', 'main', 'complementary', 'contentinfo', 'form', 'search', 'region',
+]);
+
 /** States worth spending tokens on — the ones that change what an action does. */
 const STATE_PROPS = new Set([
   'disabled', 'checked', 'expanded', 'selected', 'required', 'invalid',
   'focused', 'readonly', 'multiselectable', 'level', 'pressed', 'modal',
+  'haspopup', // a control that opens a menu — where a designer hides its Save
   'describedby', // reaches the error text a platform associates with a control
 ]);
 
@@ -89,10 +100,14 @@ export const normName = (s?: string) =>
 function stateOf(n: AXNode): string[] | undefined {
   const out: string[] = [];
   for (const p of n.properties ?? []) {
-    if (!STATE_PROPS.has(p.name.toLowerCase())) continue;
+    // Lower-cased on the way out as well as on the way in. CDP reports
+    // `hasPopup`, and every reader of this array tests a lower-case prefix, so
+    // a camel-cased name here is a state nothing can ever match.
+    const key = p.name.toLowerCase();
+    if (!STATE_PROPS.has(key)) continue;
     const v = p.value?.value;
     if (v === false || v === 'false' || v === undefined || v === '') continue;
-    out.push(v === true || v === 'true' ? p.name : `${p.name}=${String(v)}`);
+    out.push(v === true || v === 'true' ? key : `${key}=${String(v)}`);
   }
   return out.length ? out : undefined;
 }
@@ -101,13 +116,18 @@ function stateOf(n: AXNode): string[] | undefined {
  * Keep a node when it is actionable, when it is context, or when it is loose
  * text that is not already carried as some control's accessible name.
  */
-function keep(n: AXNode, role: string, parentName?: string): boolean {
+function keep(n: AXNode, role: string, parentName?: string, parentKept = false): boolean {
   if (n.ignored) return false;
   if (n.backendDOMNodeId === undefined) return false;
   if (ACTIONABLE.has(role) || CONTEXT.has(role)) return true;
   if (role === 'statictext' || role === 'paragraph') {
     const t = n.name?.value?.trim();
-    return !!t && t !== parentName; // drop text that just repeats its control's label
+    if (!t) return false;
+    // Drop label-echo on a control we already kept. Keep the text when the
+    // parent was a wrapper we discarded — that is how a designer title lives
+    // in a nameless generic span.
+    if (t === parentName && parentKept) return false;
+    return true;
   }
   return false;
 }
@@ -160,13 +180,15 @@ export function compactFrom(nodes: AXNode[], boxes: Map<Ref, [number, number, nu
   // and a missing form is the most heavily penalised failure there is.
   const compact: CompactNode[] = [];
   const roots = nodes.filter((n) => !n.parentId);
-  for (const root of roots) walk(root, 0, undefined, undefined);
+  for (const root of roots) walk(root, 0, undefined, undefined, false, undefined);
 
-  function walk(n: AXNode | undefined, depth: number, parentName: string | undefined, dialog: Ref | undefined) {
+  function walk(n: AXNode | undefined, depth: number, parentName: string | undefined, dialog: Ref | undefined, parentKept: boolean, region: string | undefined) {
     if (!n) return;
     const role = norm(n.role?.value);
     const here = role === 'dialog' || role === 'alertdialog' ? n.backendDOMNodeId ?? dialog : dialog;
-    if (keep(n, role, parentName)) {
+    const inRegion = LANDMARKS.has(role) ? role : region;
+    const kept = keep(n, role, parentName, parentKept);
+    if (kept) {
       const ref = n.backendDOMNodeId!;
       compact.push({
         ref,
@@ -177,10 +199,11 @@ export function compactFrom(nodes: AXNode[], boxes: Map<Ref, [number, number, nu
         bbox: boxes.get(ref),
         depth,
         dialog: here,
+        region: inRegion,
       });
     }
     const nextName = n.name?.value?.trim() || parentName;
-    for (const id of n.childIds ?? []) walk(byAxId.get(id), depth + 1, nextName, here);
+    for (const id of n.childIds ?? []) walk(byAxId.get(id), depth + 1, nextName, here, kept, inRegion);
   }
 
   return { byAxId, byRef, compact };
@@ -239,6 +262,23 @@ export function expandAround(snap: Snapshot, ref: Ref, up = 2, limit = 200): Det
   const out: Detail[] = [];
   dump(snap, node, 0, out, limit);
   return out;
+}
+
+/**
+ * Is `ref` inside a node with one of these roles?
+ *
+ * The AX parent chain, which the compact view flattens away. Used to tell a
+ * value being typed into an editor from the same text standing on its own: a
+ * draft echoes its content as a text node inside the box holding it, and that
+ * echo is otherwise indistinguishable from the built thing appearing in a list.
+ */
+export function insideRole(snap: Snapshot, ref: Ref, roles: readonly string[]): boolean {
+  let node = snap.full.byRef.get(ref);
+  for (let hops = 0; node && hops < 40; hops++) {
+    node = node.parentId ? snap.full.byAxId.get(node.parentId) : undefined;
+    if (node && roles.includes(norm(node.role?.value))) return true;
+  }
+  return false;
 }
 
 /**
@@ -386,11 +426,35 @@ export function errorsIn(d: Diff, after: Snapshot, near?: Ref): Surfaced[] {
 // Settling — never read a page that is still moving.
 // ---------------------------------------------------------------------------
 
-export type Settled = { quiet: boolean; polls: number; ms: number; inflight: number };
+export type Settled = {
+  quiet: boolean; polls: number; ms: number; inflight: number;
+  /** Longest gap between two polls. Large means the sampler itself was starved. */
+  maxGapMs: number;
+  /** The ceiling actually in force, after any backoff. */
+  ceilingMs: number;
+};
 
 const QUIET_MS = 250;
 const TIMEOUT_MS = 2500;
 const POLL_MS = 120;
+/** Two stable samples, never one: see the false-quiet note on settle(). */
+const STABLE_POLLS = 2;
+const CEILING_MAX_MS = 15_000;
+const CEILING_GROWTH = 1.5;
+
+/**
+ * The working ceiling, grown when this platform proves it needs longer.
+ *
+ * Only ever grows, and only on a real timeout. That is safe because the ceiling
+ * bounds the *worst* case, not the wait: settle() returns the moment the page
+ * is quiet, so a high ceiling costs a fast platform nothing. Growing on failure
+ * rather than fitting a percentile to successes matters — successes are
+ * right-censored by the current ceiling, so a too-low ceiling would never
+ * observe the evidence that it is too low, and could never correct itself.
+ */
+let ceiling = TIMEOUT_MS;
+export const settleCeiling = (): number => ceiling;
+export const resetSettleCeiling = (): void => { ceiling = TIMEOUT_MS; };
 
 /** The hash is over the compact view, which is what downstream actually reads. */
 async function axPoll(): Promise<{ hash: string; inflight: number }> {
@@ -418,28 +482,50 @@ export async function settle(
   poll: () => Promise<{ hash: string; inflight: number }> = axPoll,
 ): Promise<Settled> {
   const quietMs = opts.quietMs ?? QUIET_MS;
-  const timeoutMs = opts.timeoutMs ?? TIMEOUT_MS;
+  // An explicit budget is honoured as given and never feeds the backoff, so a
+  // caller (and every test) stays deterministic.
+  const pinned = opts.timeoutMs !== undefined;
+  const timeoutMs = opts.timeoutMs ?? ceiling;
   const t0 = Date.now();
   let prev: string | null = null;
   let stableSince = 0;
+  let stableCount = 0;
   let polls = 0;
   let inflightNow = 0;
+  let last = t0;
+  let maxGapMs = 0;
 
   for (;;) {
     const r = await poll();
     polls++;
     inflightNow = r.inflight;
     const now = Date.now();
+    maxGapMs = Math.max(maxGapMs, now - last);
+    last = now;
 
     if (r.hash === prev && r.inflight === 0) {
       if (stableSince === 0) stableSince = now;
-      if (now - stableSince >= quietMs) return { quiet: true, polls, ms: now - t0, inflight: 0 };
+      stableCount++;
+      // Two conditions, not one. Wall-clock alone is not enough: fetching the
+      // full AX tree slows under memory pressure, so two samples can match
+      // simply because we sampled too coarsely to see the churn between them.
+      // Requiring consecutive stable samples makes a starved sampler report
+      // "not quiet" rather than a confident false positive.
+      if (stableCount >= STABLE_POLLS && now - stableSince >= quietMs) {
+        return { quiet: true, polls, ms: now - t0, inflight: 0, maxGapMs, ceilingMs: timeoutMs };
+      }
     } else {
       stableSince = 0;
+      stableCount = 0;
       prev = r.hash;
     }
 
-    if (now - t0 >= timeoutMs) return { quiet: false, polls, ms: now - t0, inflight: inflightNow };
+    if (now - t0 >= timeoutMs) {
+      // Grow the ceiling on the evidence that it was too small. Never shrink:
+      // the cost of a high ceiling on a fast page is zero.
+      if (!pinned) ceiling = Math.min(Math.round(ceiling * CEILING_GROWTH), CEILING_MAX_MS);
+      return { quiet: false, polls, ms: now - t0, inflight: inflightNow, maxGapMs, ceilingMs: timeoutMs };
+    }
     await new Promise((res) => setTimeout(res, POLL_MS));
   }
 }

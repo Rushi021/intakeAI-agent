@@ -60,21 +60,6 @@ export function stats(ir: IR) {
   };
 }
 
-/**
- * The model plans against this, not the full 195 fields — names only. Field
- * detail is fetched per form when that form is actually being built.
- */
-export function skeleton(ir: IR) {
-  return {
-    study: ir.study,
-    visits: ir.visits.map((v) => ({
-      name: v.name,
-      window: [v.window_start_day, v.window_end_day],
-      forms: v.forms.map((f) => ({ name: f.name, repeating: f.repeating, fieldCount: f.fields.length })),
-    })),
-  };
-}
-
 // ---------------------------------------------------------------------------
 // The plan — what the agent is trying to build, in the order it can be built.
 // ---------------------------------------------------------------------------

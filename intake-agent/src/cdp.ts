@@ -10,7 +10,28 @@ let tabId: number | null = null;
  * settle() waits on — the other is the accessibility tree going quiet.
  */
 const pending = new Set<string>();
-export const inflight = (): number => pending.size;
+
+/**
+ * Requests that were already open when the current action was dispatched.
+ *
+ * Absolute zero is the wrong success condition: a platform with an SSE stream,
+ * a long-poll, or one leaked request id (a `loadingFinished` we never saw)
+ * never reaches it, and every action would then time out no matter how patient
+ * we are. What settle() actually needs to know is whether the requests *this
+ * action* started have drained — so ignore whatever was already open. Exact,
+ * and no baseline or statistics required.
+ */
+let actionMark = new Set<string>();
+
+/** Call immediately before dispatching an action. */
+export const markAction = (): void => { actionMark = new Set(pending); };
+
+/** Requests opened since the last markAction() and not yet finished. */
+export const inflight = (): number => {
+  let n = 0;
+  for (const id of pending) if (!actionMark.has(id)) n++;
+  return n;
+};
 
 /** Set by the panel. One consumer, so one callback rather than a subscriber list. */
 export let onStale: (reason: string) => void = () => {};
@@ -41,6 +62,7 @@ if (globalThis.chrome?.debugger) {
 export async function attach(id: number): Promise<void> {
   if (tabId === id) return;
   pending.clear();
+  actionMark = new Set();
   if (tabId !== null) await detach();
   await chrome.debugger.attach({ tabId: id }, '1.3');
   tabId = id;

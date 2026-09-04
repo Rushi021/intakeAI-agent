@@ -40,7 +40,7 @@ export function snap(root: AXNode, url = 'https://esource.example/build', title 
     url,
     title,
     compact,
-    settled: { quiet: true, polls: 2, ms: 30, inflight: 0 },
+    settled: { quiet: true, polls: 2, ms: 30, inflight: 0, maxGapMs: 120, ceilingMs: 2500 },
     full: { byAxId, byRef, bbox: boxes },
   };
 }

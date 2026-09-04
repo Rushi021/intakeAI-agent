@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run log — extraction and build history</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="shell">
+
+  <aside class="rail">
+    <h1 class="rail__title">Run log
+      <span>Every extraction and every study build this machine has recorded.</span>
+    </h1>
+
+    <nav class="nav">
+      <a href="/">Extraction</a>
+      <a href="/runs.html" aria-current="page">Run log</a>
+    </nav>
+
+    <section class="queue">
+      <div class="queue__head"><span>Filter</span></div>
+      <div class="filters" id="filters"></div>
+    </section>
+
+    <section class="queue">
+      <div class="queue__head"><span>Totals</span></div>
+      <div id="totals"></div>
+    </section>
+
+    <p class="rail__note" id="note">
+      Stored in <code>outputs/runs.db</code> (SQLite). Extraction runs are written by the server;
+      agent runs are loaded with <code>python -m soa.runs ingest &lt;lane&gt;.json</code>.
+    </p>
+  </aside>
+
+  <main class="preview">
+    <div class="tabs"><span class="tab" aria-selected="true" id="head">Loading…</span></div>
+    <div class="panel" id="panel"></div>
+  </main>
+
+</div>
+<script src="/runs.js"></script>
+</body>
+</html>

@@ -103,8 +103,49 @@ test('non-JSON from the model is a rejection, not a crash', () => {
   assert.equal(validate(s, 'I think you should click Save!').ok.length, 0);
 });
 
+test('Create is a commit verb, and Create New Version is a decoy', () => {
+  const s = snap(N('RootWebArea', 'x', [N('button', 'Create New Version'), N('button', 'Create')]));
+  assert.equal(commitCandidates(s)[0].name, 'Create');
+  assert.equal(commitCandidates(s)[0].decoy, false);
+});
+
 test('a control that looks like Save and is not ranks below the real one', () => {
   const s = snap(N('RootWebArea', 'x', [N('button', 'Save As Template'), N('button', 'Save')]));
   assert.equal(commitCandidates(s)[0].name, 'Save');
   assert.equal(commitCandidates(s)[0].decoy, false);
+});
+
+test('a word that closes an editor ranks below one that unambiguously saves', () => {
+  // "Done" dismisses an inspector on one designer and commits on another.
+  // Preferring it over a real Save looks like success and stores nothing.
+  const s = snap(N('RootWebArea', 'x', [
+    N('button', 'Done'),
+    N('button', 'Save As Template'),
+    N('button', 'Commit Sheet'),
+  ]));
+  const ranked = commitCandidates(s);
+  assert.deepEqual(ranked.map((c) => c.name), ['Commit Sheet', 'Done', 'Save As Template']);
+  assert.equal(ranked[0].weak, false);
+  assert.equal(ranked[1].weak, true);
+  assert.equal(ranked[2].decoy, true);
+});
+
+test('a tie is broken by which label the library itself is undecided over', () => {
+  // Both score on "number" for integer. Only one of them also reads as a
+  // decimal, and that one is the ambiguous half of the pair.
+  assert.deepEqual(resolveType('integer', ['Number (Decimal)', 'Number (Whole)', 'Free Text']),
+    { label: 'Number (Whole)' });
+  assert.deepEqual(resolveType('decimal', ['Number (Decimal)', 'Number (Whole)', 'Free Text']),
+    { label: 'Number (Decimal)' });
+  assert.deepEqual(resolveType('integer', ['Numeric (Integer)', 'Numeric (Fractional)']),
+    { label: 'Numeric (Integer)' });
+
+  // A real tie — two labels that read equally well and neither ambiguously —
+  // still abstains. The rule breaks ties by ambiguity; it does not invent one.
+  assert.ok('abstain' in resolveType('integer', ['Number', 'Numeric']));
+
+  // And the near-neighbour pair the brief warns about is still refused, because
+  // neither entry reads as a radio at all.
+  assert.ok('abstain' in resolveType('radio', ['Select One', 'Select One (Expanded)']));
+  assert.deepEqual(resolveType('single_select', ['Select One', 'Select One (Expanded)']), { label: 'Select One' });
 });

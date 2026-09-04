@@ -1,0 +1,4 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/intake-soa/.venv/bin/python",
+  "python.terminal.activateEnvironment": true
+}

@@ -1,8 +1,9 @@
 import { attach, detach, detachOnUnload, setStaleHandler } from './cdp.ts';
 import { snapshot, toPrompt, expandAround, dialogControls, nodesNear, type Snapshot } from './perceive.ts';
-import { parseIR, stats, planItems, type IR } from './ir.ts';
-import { PROVIDERS, CONFIG, hasKey, testConnection } from './llm.ts';
-import { newSession, run, statusTree, summary, type Session, type StatusNode } from './run.ts';
+import { parseIR, stats, planItems, contextOf, type IR } from './ir.ts';
+import { PROVIDERS, CONFIG, hasKey, testConnection, activeModel } from './llm.ts';
+import { explain, newSession, run, statusTree, summary, type Session, type StatusNode } from './run.ts';
+import { ensureContext, click, locate } from './act.ts';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const el = (tag: string, text?: string, cls?: string) => {
@@ -15,6 +16,8 @@ const el = (tag: string, text?: string, cls?: string) => {
 let ir: IR | null = null;
 let snap: Snapshot | null = null;
 let tab: chrome.tabs.Tab | null = null;
+/** Progress-row click: which plan item the operator is inspecting. */
+let focusedItem: string | null = null;
 
 /**
  * The session is this document's lifetime — not a service worker's. sw.ts holds
@@ -194,7 +197,13 @@ $('m-test').addEventListener('click', async () => {
   $('m-out').textContent = 'Testing…';
   try {
     const r = await testConnection();
-    $('m-out').textContent = `OK — ${CONFIG.model} replied "${r.text.trim()}" (${r.inputTokens}+${r.outputTokens} tokens).`;
+    const used = activeModel();
+    counts('m-info', [
+      ['provider', PROVIDERS[CONFIG.provider].label],
+      ['model', used === CONFIG.model ? used : `${used} (fell back from ${CONFIG.model})`],
+      ['API key', hasKey() ? 'set in .env at build time' : 'missing'],
+    ]);
+    $('m-out').textContent = `OK — ${used} replied "${r.text.trim()}" (${r.inputTokens}+${r.outputTokens} tokens).`;
   } catch (err) {
     $('m-out').textContent = err instanceof Error ? err.message : String(err);
   }
@@ -233,6 +242,21 @@ function render(): void {
   renderLedger();
 }
 
+/**
+ * What the model did with this question, in the card that resulted from it.
+ * Only the type question ever reaches the model, so every other card says so
+ * rather than leaving the operator guessing.
+ */
+function modelLine(signature: string): string {
+  if (!signature.startsWith('type:')) {
+    return 'Model: not involved — this question is not one the model is asked.';
+  }
+  if (!hasKey()) return 'Model: no API key in this build, so the question came straight to you.';
+  const asked = session!.facts.get(`asked:${signature}`);
+  if (!asked) return `Model: ${activeModel()} was not reached before this was raised.`;
+  return `Model: asked ${activeModel()} — ${asked.why ?? 'no usable answer'}.`;
+}
+
 function renderGate(): void {
   const open = [...session!.queue.values()].filter((c) => !c.answered);
   $('gate-wrap').hidden = open.length === 0;
@@ -241,18 +265,34 @@ function renderGate(): void {
 
   const box = $('gate');
   box.replaceChildren();
+
+  const asked = [...session!.facts.keys()].filter((k) => k.startsWith('asked:type:')).length;
+  const accepted = [...session!.facts].filter(([k, f]) => k.startsWith('type:') && f.source === 'llm').length;
+  box.append(el('p',
+    `${PROVIDERS[CONFIG.provider].label} ${activeModel()} · key ${hasKey() ? 'set' : 'missing'} · `
+    + `${asked} question${asked === 1 ? '' : 's'} sent, ${accepted} answer${accepted === 1 ? '' : 's'} accepted. `
+    + 'The model is only ever asked what this platform calls a field type, and only after the synonym pass abstains. '
+    + 'It never answers a card below — a card is what is left once the model has already failed or been bypassed.',
+    'muted'));
+
   for (const card of open) {
-    const c = el('div', undefined, 'card');
+    const { kind, reason } = explain(card.signature);
+    const inspecting = focusedItem && card.items.includes(focusedItem);
+    const c = el('div', undefined, inspecting ? 'card on' : 'card');
     c.id = `card-${card.signature}`;
+    c.append(el('p', `${card.signature} · ${kind === 'choice' ? 'you can answer this' : 'needs a look at the platform'}`, 'sig'));
+    if (inspecting) c.append(el('p', `Looking at ${focusedItem} on the platform.`, 'sig'));
     c.append(el('h3', card.question));
-    c.append(el('p', `${card.items.length} item${card.items.length === 1 ? '' : 's'} waiting — ${card.items.slice(0, 3).join(', ')}${card.items.length > 3 ? ` and ${card.items.length - 3} more` : ''}`, 'muted'));
+    c.append(el('p', reason));
+    c.append(el('p', modelLine(card.signature), 'muted'));
+    c.append(el('p', `Blocks ${card.items.length} item${card.items.length === 1 ? '' : 's'}: ${card.items.slice(0, 4).join(', ')}${card.items.length > 4 ? ` and ${card.items.length - 4} more` : ''}`, 'muted'));
 
     const tried = el('details') as HTMLDetailsElement;
-    tried.append(el('summary', 'what the agent tried'));
+    tried.append(el('summary', 'what the agent did, and what read back'));
     tried.append(el('pre', card.tried.join('\n') || '—'));
     c.append(tried);
 
-    if (card.choices.length) {
+    if (kind === 'choice' && card.choices.length) {
       // The answer is chosen from the live page, never typed. A free-text box
       // would let a human invent a control that is not there.
       const list = el('div', undefined, 'choices');
@@ -266,8 +306,10 @@ function renderGate(): void {
         list.append(b);
       }
       c.append(list);
+    } else if (kind === 'choice') {
+      c.append(el('p', 'No candidate on the screen the agent was looking at. Navigate the platform to where this is possible, then Resume.', 'muted'));
     } else {
-      c.append(el('p', 'No candidate on the current screen. Navigate the platform to where this is possible, then Resume.', 'muted'));
+      c.append(el('p', 'Nothing here to pick: no control on the page settles this. Fix it in the platform, or accept it as a gap, then Resume — the listed items are re-verified from scratch.', 'muted'));
     }
     box.append(c);
   }
@@ -281,11 +323,13 @@ function renderStatus(): void {
 
 function nodeRow(n: StatusNode, openable: boolean): HTMLElement {
   const kids = n.children.length;
-  const line = `${n.label} — ${n.status}${kids ? ` (${n.children.filter((c) => c.status === 'complete').length}/${kids})` : ''}`;
+  const issue = n.why ? explain(n.why).reason : '';
+  const line = `${n.label} — ${n.status}${n.why ? ` · ${n.why}` : ''}${kids ? ` (${n.children.filter((c) => c.status === 'complete').length}/${kids})` : ''}`;
 
   if (!kids) {
     const row = el(n.status === 'escalated' ? 'button' : 'div', line, `row ${n.status}`);
-    if (n.status === 'escalated') row.addEventListener('click', () => jumpTo(n.id));
+    if (issue) row.title = issue;
+    if (n.status === 'escalated') row.addEventListener('click', () => void jumpTo(n.id));
     return row;
   }
   const d = el('details', undefined, n.status) as HTMLDetailsElement;
@@ -295,11 +339,35 @@ function nodeRow(n: StatusNode, openable: boolean): HTMLElement {
   return d;
 }
 
-/** The item id is already the shared key across the IR, the ledger and the queue. */
-function jumpTo(itemId: string): void {
+/** Open the platform page this item was on, and highlight its card here. */
+async function jumpTo(itemId: string): Promise<void> {
+  focusedItem = itemId;
+  render();
   const card = [...session!.queue.values()].find((c) => c.items.includes(itemId));
-  if (!card) return;
-  document.getElementById(`card-${card.signature}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const cardEl = card ? document.getElementById(`card-${card.signature}`) : null;
+  $('gate-wrap').hidden = false;
+  cardEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  const item = ir ? planItems(ir).find((p) => p.id === itemId) : undefined;
+  let arrived = false;
+  if (item && tab?.id) {
+    $('status').textContent = `Opening ${itemId} on the platform…`;
+    try {
+      await attach(tab.id);
+      $<HTMLButtonElement>('detach').disabled = false;
+      const ctx = await ensureContext(await capture(), capture, contextOf(item));
+      arrived = !('escalate' in ctx);
+      if (arrived && item.kind === 'field') {
+        const ref = locate(ctx.snap, { name: item.field.label });
+        if (ref !== null) await click(ref);
+      }
+      $('status').textContent = arrived
+        ? `Opened ${itemId} on the platform.`
+        : `Could not open ${itemId} on the platform — the card still has the reason.`;
+    } catch (err) {
+      $('status').textContent = err instanceof Error ? err.message : String(err);
+    }
+  }
 }
 
 function renderLedger(): void {
@@ -312,7 +380,9 @@ function renderLedger(): void {
             r.item,
             r.state,
             r.source ?? r.signature ?? '',
-            r.settled === false ? 'page-not-settled' : '',
+            r.settled === false
+              ? `page-not-settled after ${r.settleMs ?? '?'}ms${r.settleGapMs && r.settleGapMs > 400 ? `, sampler starved (${r.settleGapMs}ms gap)` : ''}`
+              : '',
             `${r.attempts} attempt${r.attempts === 1 ? '' : 's'}`,
             r.history.at(-1) ?? '',
           ]

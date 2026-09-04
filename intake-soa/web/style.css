@@ -310,3 +310,17 @@ details.raw pre {
 }
 
 :focus-visible { outline: 2px solid var(--live); outline-offset: 2px; border-radius: 4px; }
+
+/* ---------- run log ---------- */
+
+.nav { display: flex; gap: 4px; }
+.nav a {
+  padding: 5px 10px; border-radius: 6px;
+  font-size: 13px; text-decoration: none; color: var(--ink-2);
+}
+.nav a:hover { background: var(--rule-2); color: var(--ink); }
+.nav a[aria-current="page"] { background: #E9EDFA; color: var(--live); font-weight: 500; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 4px; }
+.filters .tab { padding: 4px 9px; border: 1px solid var(--rule); border-radius: 6px; background: none; }
+.filters .tab[aria-selected="true"] { border-color: var(--live); color: var(--live); background: #F4F7FE; }

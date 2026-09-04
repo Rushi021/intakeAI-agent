@@ -70,6 +70,12 @@ test('same screen, different DOM → same actionable surface', () => {
   assert.deepEqual(actionable(mockA), ['button:+ Add Visit', 'link:Element Library']);
 });
 
+test('a chrome title survives when its wrapper is discarded', () => {
+  const title = N('generic', 'Demographics', [N('statictext', 'Demographics')]);
+  const { compact } = compactFrom(flat(N('RootWebArea', 'x', [title])), boxes);
+  assert.ok(compact.some((c) => c.name === 'Demographics'), 'a designer title must not vanish with its wrapper');
+});
+
 test('pruning drops layout noise but keeps context', () => {
   const { compact } = compactFrom(flat(mockB), boxes);
   assert.equal(compact.some((c) => c.role === 'generic'), false, 'generic wrappers are noise');
@@ -128,7 +134,7 @@ test('a modal dialog wins over a stale non-modal one', () => {
 
 // ── comparison: one primitive, four readings of it ──────────────────────────
 
-import { diff, classify, errorsIn, settle, toPrompt, activeDialog } from '../src/perceive.ts';
+import { diff, classify, errorsIn, settle, settleCeiling, resetSettleCeiling, toPrompt, activeDialog } from '../src/perceive.ts';
 import { N as NN, props as P, snap as SNAP } from './helpers.ts';
 
 test('an identical view produces an empty diff', () => {
@@ -216,6 +222,50 @@ test('a request still in flight is not quiet, however stable the tree', async ()
   assert.equal(r.quiet, false, 'a pending request is about to change the DOM');
 });
 
+test('one matching sample is not quiet — a starved sampler must not read as settled', async () => {
+  // A page that is still moving, sampled coarsely: the first two reads happen
+  // to match, then it keeps churning. Requiring a single stable sample would
+  // return quiet:true on the pair. That is the false-quiet bug, and it is
+  // exactly what a slow getFullAXTree under memory pressure produces.
+  const seq = ['a', 'a', 'b', 'c', 'd', 'e', 'f', 'g'];
+  let i = 0;
+  const r = await settle({ quietMs: 0, timeoutMs: 600 }, async () => {
+    const hash = seq[i] ?? `z${i}`;
+    i++;
+    return { hash, inflight: 0 };
+  });
+  assert.equal(r.quiet, false, 'a lone matching pair on a moving page is not settled');
+});
+
+test('the ceiling grows after a real timeout and never shrinks', async () => {
+  resetSettleCeiling();
+  const base = settleCeiling();
+  let n = 0;
+  // No timeoutMs: this is the production path, so the backoff applies.
+  const r = await settle({ quietMs: 10_000 }, async () => ({ hash: `h${n++}`, inflight: 0 }));
+  assert.equal(r.quiet, false);
+  assert.ok(settleCeiling() > base, `ceiling grew from ${base} to ${settleCeiling()}`);
+  assert.equal(r.ceilingMs, base, 'the run itself used the pre-growth ceiling');
+  resetSettleCeiling();
+});
+
+test('an explicit budget is honoured exactly and does not feed the backoff', async () => {
+  resetSettleCeiling();
+  const base = settleCeiling();
+  let n = 0;
+  await settle({ quietMs: 0, timeoutMs: 150 }, async () => ({ hash: `h${n++}`, inflight: 0 }));
+  assert.equal(settleCeiling(), base, 'a pinned timeout leaves the session ceiling alone');
+});
+
+test('requests already open when the action started do not block settling', async () => {
+  // inflight is "opened since markAction()", so a permanent SSE stream or a
+  // leaked request id reports 0 here and the page can still settle.
+  const r = await settle({ quietMs: 0, timeoutMs: 300 }, scripted([
+    { hash: 'a', inflight: 0 }, { hash: 'a', inflight: 0 },
+  ]));
+  assert.equal(r.quiet, true);
+});
+
 test('a page that never settles returns a fact, not an exception', async () => {
   let n = 0;
   const r = await settle({ quietMs: 0, timeoutMs: 300 }, async () => ({ hash: `h${n++}`, inflight: 0 }));
@@ -223,4 +273,15 @@ test('a page that never settles returns a fact, not an exception', async () => {
   assert.ok(r.polls > 1);
   // The run continues and the ledger records it — an unsettled write is a
   // different failure from a wrong decision, and conflating them misleads the gate.
+});
+
+test('a state name is lower-cased on the way out, not only on the way in', () => {
+  // CDP reports `hasPopup`; every reader tests a lower-case prefix, so a
+  // camel-cased name here is a state nothing can ever match — which is how a
+  // Save hidden behind an overflow menu stayed invisible.
+  const s = SNAP(NN('RootWebArea', 'x', [
+    NN('button', 'Record actions', [], P(['hasPopup', 'menu'])),
+  ]));
+  const menu = s.compact.find((c) => c.name === 'Record actions')!;
+  assert.deepEqual(menu.state, ['haspopup=menu']);
 });

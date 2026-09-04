@@ -14,7 +14,7 @@
  */
 import { chat, type Msg } from './llm.ts';
 import { normName, toPrompt, type Snapshot } from './perceive.ts';
-import { type Descriptor } from './act.ts';
+import { CLOSE_WORDS, type Descriptor } from './act.ts';
 import { CANONICAL_TYPES, type FieldType } from './ir.ts';
 
 // ---------------------------------------------------------------------------
@@ -48,8 +48,8 @@ export const newFacts = (): Facts => new Map();
 const SYNONYMS: Record<FieldType, string[]> = {
   text: ['text', 'text field', 'short text', 'single line', 'one line text', 'string', 'free text', 'text box'],
   textarea: ['text area', 'textarea', 'long text', 'multi line', 'multiline text', 'paragraph', 'memo', 'notes', 'comment'],
-  integer: ['integer', 'whole number', 'number', 'numeric', 'int', 'count'],
-  decimal: ['decimal', 'float', 'number decimal', 'real', 'numeric decimal', 'measurement'],
+  integer: ['integer', 'whole number', 'whole', 'number', 'numeric', 'int', 'count'],
+  decimal: ['decimal', 'fractional', 'float', 'number decimal', 'real', 'numeric decimal', 'measurement'],
   date: ['date', 'date picker', 'calendar', 'date field'],
   time: ['time', 'time picker', 'clock', 'time field'],
   datetime: ['date time', 'datetime', 'date and time', 'timestamp', 'date time picker'],
@@ -97,13 +97,33 @@ export type Resolution = { label: string } | { abstain: string };
  * single_select, and the rule refuses. Abstention is the feature: an abstained
  * type reaches a human, a wrong one reaches the database.
  */
+/**
+ * Does this label read at least as strongly as something else?
+ *
+ * The tie-break, and the only one. "Number (Decimal)" and "Number (Whole)" both
+ * score on the word "number" and tie for `integer` — but the first also scores
+ * for `decimal` and the second does not, so the second is the less ambiguous
+ * reading and the first is disqualified. Nothing here is about which is
+ * *right*; it is about which one the library itself is undecided over.
+ */
+const alsoReadsAs = (label: string, canonical: FieldType): FieldType | null =>
+  CANONICAL_TYPES.find((c) => c !== canonical && score(label, c) >= score(label, canonical)) ?? null;
+
 export function resolveType(canonical: FieldType, library: string[]): Resolution {
-  const scored = library
+  let scored = library
     .map((l) => ({ l, s: score(l, canonical) }))
     .filter((x) => x.s > 0)
     .sort((a, b) => b.s - a.s);
 
   if (scored.length === 0) return { abstain: `no element in the library reads as ${canonical}` };
+
+  // Break a tie by ambiguity before giving up on it. Only ever applied to a
+  // tie: with a clear winner the margin rule below is the safer test.
+  if (scored[1]?.s === scored[0].s) {
+    const clear = scored.filter((x) => x.s < scored[0].s || alsoReadsAs(x.l, canonical) === null);
+    if (clear.filter((x) => x.s === scored[0].s).length === 1) scored = clear;
+  }
+
   const [top, next] = scored;
   if (next && next.s === top.s) return { abstain: `"${top.l}" and "${next.l}" score equally for ${canonical}` };
   if (next && top.s - next.s < 1) return { abstain: `"${top.l}" beats "${next.l}" by too little` };
@@ -154,23 +174,36 @@ export function discoverLibrary(snap: Snapshot, irLabels: Set<string>): { labels
 // Vocabularies for the platform facts that are controls rather than types
 // ---------------------------------------------------------------------------
 
-export const COMMIT_WORDS = ['save', 'submit', 'apply', 'commit', 'publish', 'confirm', 'done', 'finish', 'ok'];
-/** Ranked below the above, and never auto-accepted — these look like Save and are not. */
-export const COMMIT_DECOYS = ['save as', 'save as template', 'save draft', 'save and new', 'save copy', 'export'];
-export const REUSE_TEMPLATE_WORDS = ['save as template', 'publish as template', 'make template', 'save as'];
-export const REUSE_COPY_WORDS = ['copy from', 'duplicate', 'clone', 'add existing', 'import', 'reuse', 'copy'];
+export const COMMIT_WORDS = ['save', 'store', 'submit', 'apply', 'commit', 'publish', 'confirm', 'create', 'done', 'finish', 'ok'];
+/**
+ * Words that close an editor as often as they commit one. "Done" and "Finished"
+ * dismiss an inspector on one designer and save on another, so they rank below
+ * an unambiguous Save — including below a Save that is still inside an unopened
+ * menu. Getting this wrong looks like success and stores nothing.
+ *
+ * The list lives in act.ts because dismiss() needs it to close an overlay; it
+ * is the same set of words either way.
+ */
+export const WEAK_COMMIT_WORDS = CLOSE_WORDS;
+/** Ranked below both, and never auto-accepted — these look like Save and are not. */
+export const COMMIT_DECOYS = ['save as', 'save as template', 'save draft', 'save and new', 'save copy', 'export', 'create new version', 'create copy'];
 
 /** Candidates for a commit control, best first. A decoy never outranks a plain one. */
-export function commitCandidates(snap: Snapshot): { name: string; ref: number; decoy: boolean }[] {
-  const out: { name: string; ref: number; decoy: boolean }[] = [];
+export function commitCandidates(snap: Snapshot): { name: string; role: string; ref: number; decoy: boolean; weak: boolean }[] {
+  const out: { name: string; role: string; ref: number; decoy: boolean; weak: boolean }[] = [];
   for (const n of snap.compact) {
     if (n.role !== 'button' && n.role !== 'menuitem') continue;
     const name = normName(n.name);
     if (!name) continue;
     if (!COMMIT_WORDS.some((w) => name.includes(w))) continue;
-    out.push({ name: n.name!, ref: n.ref, decoy: COMMIT_DECOYS.some((w) => name.includes(w)) });
+    out.push({
+      name: n.name!, role: n.role, ref: n.ref,
+      decoy: COMMIT_DECOYS.some((w) => name.includes(w)),
+      weak: WEAK_COMMIT_WORDS.some((w) => name.includes(w)),
+    });
   }
-  return out.sort((a, b) => Number(a.decoy) - Number(b.decoy) || a.name.length - b.name.length);
+  return out.sort((a, b) =>
+    Number(a.decoy) - Number(b.decoy) || Number(a.weak) - Number(b.weak) || a.name.length - b.name.length);
 }
 
 // ---------------------------------------------------------------------------
@@ -248,12 +281,13 @@ export async function askModel(
 
 export const V = {
   addVisit: ['add visit', 'new visit', 'create visit', 'add timepoint', 'new timepoint'],
-  addForm: ['add form', 'new form', 'add document', 'new document', 'add source', 'add crf', 'new crf', 'add page'],
+  addForm: ['add form', 'new form', 'add document', 'new document', 'add source', 'new source', 'source document', 'add crf', 'new crf', 'add page'],
   addField: ['add field', 'new field', 'add element', 'new element', 'add item', 'add question', 'insert field'],
-  addAny: ['add', 'new', 'create', 'insert', '+'],
+  // 'create' is a commit verb on many designers — it is in COMMIT_WORDS, not here.
+  addAny: ['add', 'new', 'insert', '+'],
   label: ['label', 'field label', 'name', 'question', 'caption', 'title', 'prompt'],
   type: ['type', 'field type', 'element type', 'control type', 'data type', 'widget', 'control'],
-  required: ['required', 'mandatory', 'must complete', 'is required'],
+  required: ['required', 'mandatory', 'compulsory', 'obligatory', 'must complete', 'must answer', 'is required'],
   repeating: ['repeating', 'repeat', 'log', 'multiple records', 'recurring', 'grid'],
   min: ['min', 'minimum', 'lower', 'low', 'range from', 'from'],
   max: ['max', 'maximum', 'upper', 'high', 'range to', 'to'],
@@ -262,8 +296,21 @@ export const V = {
   optionLabel: ['label', 'display', 'display text', 'text', 'option label', 'choice'],
   addOption: ['add option', 'add value', 'add choice', 'add row', 'add code', 'new option'],
   bulkOption: ['bulk', 'paste', 'import values', 'bulk entry', 'code list', 'paste values'],
-  skip: ['skip', 'skip logic', 'condition', 'conditional', 'show when', 'visible when', 'branching', 'logic'],
+  // Skip logic is three controls, not one: a mode, the field the rule reads,
+  // and the value it compares against. They were a single vocabulary and a
+  // single typed string, which cannot wire a rule on any platform.
+  skip: ['skip', 'skip logic', 'condition', 'conditional', 'visibility', 'show when', 'visible when',
+    'branching', 'display rule', 'conditional display', 'display this question', 'logic'],
+  /** The option on the mode control that means "only sometimes". */
+  skipOn: ['when', 'condition', 'conditional', 'only', 'branch', 'certain', 'rule', 'sometimes'],
+  skipWhen: ['when element', 'when field', 'driven by item', 'driven by', 'depends on', 'based on',
+    'controlling field', 'controlled by', 'when'],
+  skipValue: ['equals value', 'equals', 'value is', 'shown when equals', 'reveal when answer is',
+    'only when that answer is', 'only when', 'shown when value is'],
   window: ['window', 'day', 'days', 'start', 'end', 'from', 'to', 'offset'],
+  // Split: a single list matching both start and end makes locate() abstain.
+  windowStart: ['window start', 'start day', 'from', 'start', 'onset', 'window from'],
+  windowEnd: ['window end', 'end day', 'until', 'end', 'window to', 'to'],
   formula: ['formula', 'expression', 'calculation', 'derive', 'compute'],
 } as const;
 

@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { parseIR, stats, skeleton, planItems, orderFields, formKey, recurring } from '../src/ir.ts';
+import { parseIR, stats, planItems, orderFields, formKey, recurring } from '../src/ir.ts';
 
 const PATH = new URL('../../intake-takehome-2/data/abc-101-study.ir.json', import.meta.url);
 const ir = parseIR(readFileSync(PATH, 'utf8'));
@@ -16,14 +16,6 @@ test('parses the real study to the counts data/README.md documents', () => {
   assert.equal(s.distinctForms, 17);
   assert.equal(s.fields, 195);
   assert.equal(s.skipRules, 13);
-});
-
-test('the model gets names, not 195 fields', () => {
-  const ir = parseIR(readFileSync(PATH, 'utf8'));
-  const json = JSON.stringify(skeleton(ir));
-  assert.ok(!json.includes('Subject Initials'), 'field labels must not reach the planning prompt');
-  assert.ok(json.includes('Demographics'));
-  assert.ok(json.length < 4000, `skeleton is ${json.length} chars — too big for a planning prompt`);
 });
 
 test('malformed input is rejected, not half-accepted', () => {
