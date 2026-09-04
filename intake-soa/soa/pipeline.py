@@ -23,6 +23,7 @@ from docling_core.types.doc import DoclingDocument
 
 from . import llm
 from .extract import apply_linkage, assemble, strip_internals
+from .fallback import check_column_axis, recover
 from .footnotes import detect_footnotes, item_label, marker_key
 from .linkage import link_markers
 from .locator import locate
@@ -88,6 +89,11 @@ def run(pdf_path, cache: Path | None = None, use_model: bool = True, progress=No
     step("locating", "Scoring tables for the Schedule of Activities")
     scored, groups = locate(doc, blocks)
 
+    fallback = {"triggered": False}
+    if not groups and use_model:
+        step("fallback", "No table scored — asking the model which one is the schedule")
+        groups, fallback = recover(doc, scored)
+
     schedules = []
     for n, group in enumerate(groups, start=1):
         step("extracting", f"Building schedule {n} of {len(groups)}")
@@ -105,6 +111,7 @@ def run(pdf_path, cache: Path | None = None, use_model: bool = True, progress=No
             linked, orphans = [], []
             soa["linkage_error"] = f"{type(exc).__name__}: {exc}"
         apply_linkage(soa, linked, orphans)
+        check_column_axis(soa, use_model)
 
         soa["interpretation"] = []
         for frag in soa["fragments"]:
@@ -117,6 +124,22 @@ def run(pdf_path, cache: Path | None = None, use_model: bool = True, progress=No
                   "mark_share": r["mark_share"], "gate": r["gate_why"]}
                  for r in scored if r["verdict"] == "review"]
 
+    review = {
+        "schedules_found": len(schedules),
+        "near_miss_tables": near_miss,
+        "footnote_blocks": {
+            verdict: sum(1 for b in blocks if b["verdict"] == verdict)
+            for verdict in ("accept", "review", "discard")
+        },
+        "footnote_blocks_flagged": [
+            {"page": b["block"]["page"], "score": b["score"], "markers": b["block"]["markers"],
+             "attached_to": b["table"]["id"] if b["table"] else None}
+            for b in blocks if b["verdict"] == "review"
+        ],
+    }
+    if fallback.get("triggered"):
+        review["fallback"] = fallback           # only when the rules found nothing — else no key added
+
     return {
         "document": {
             "filename": pdf_path.name,
@@ -125,18 +148,6 @@ def run(pdf_path, cache: Path | None = None, use_model: bool = True, progress=No
             **inventory,
         },
         "schedules": schedules,
-        "review": {
-            "schedules_found": len(schedules),
-            "near_miss_tables": near_miss,
-            "footnote_blocks": {
-                verdict: sum(1 for b in blocks if b["verdict"] == verdict)
-                for verdict in ("accept", "review", "discard")
-            },
-            "footnote_blocks_flagged": [
-                {"page": b["block"]["page"], "score": b["score"], "markers": b["block"]["markers"],
-                 "attached_to": b["table"]["id"] if b["table"] else None}
-                for b in blocks if b["verdict"] == "review"
-            ],
-        },
+        "review": review,
         "table_scores": [{k: v for k, v in r.items() if k != "fn_blocks"} for r in scored],
     }

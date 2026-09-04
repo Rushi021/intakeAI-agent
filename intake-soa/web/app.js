@@ -391,11 +391,25 @@ function reviewBlock(r, doc) {
     ? r.review.near_miss_tables.map((n) => `${n.table_id} p${n.page} (${n.score})`).join(", ")
     : "none", r.review.near_miss_tables.length > 0);
 
+  if (r.review.fallback && r.review.fallback.triggered) {
+    const f = r.review.fallback;
+    add("model fallback",
+      [f.outcome, f.picked && f.picked.length ? `picked ${f.picked.join(", ")}` : null,
+       f.model].filter(Boolean).join(" · "),
+      f.outcome !== "recovered");
+  }
+
   r.schedules.forEach((s) => {
     const un = s.review.footnotes_never_used_in_table;
     const orph = s.review.markers_in_table_without_definition;
     add(`${s.soa_id} — footnotes with no target`, un.length ? un.join(", ") : "none", un.length > 0);
     add(`${s.soa_id} — markers with no definition`, orph.length ? orph.join(", ") : "none", orph.length > 0);
+    if (s.review.column_axis_warning) {
+      const w = s.review.column_axis_warning;
+      add(`${s.soa_id} — column axis`,
+        `${w.docling_value_cols} column parsed, header lists ${w.timepoint_labels_in_header} timepoints`
+        + (w.model_columns_read ? ` (model reads ${w.model_columns_read})` : ""), true);
+    }
     (s.interpretation || []).forEach((i, n) => {
       add(`${s.soa_id} — interpretation ${n + 1}`,
         i.status === "ok"

@@ -131,6 +131,11 @@ def assemble(group, doc, footnote_blocks, soa_index: int) -> dict:
             "verdict": rec["verdict"], "signals": rec["signals"],
             "mark_share": rec["mark_share"], "gate": rec["gate_why"],
             "footnote_evidence": rec["fn_why"],
+            # provenance only when the model overrode a rules verdict — absent on a normal run
+            **({"verdict_source": rec["verdict_source"],
+                "fallback_reason": rec.get("fallback_reason"),
+                "fallback_confidence": rec.get("fallback_confidence")}
+               if rec.get("verdict_source") == "model_fallback" else {}),
         } for rec in group],
     }
 

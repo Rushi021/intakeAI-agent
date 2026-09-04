@@ -71,7 +71,7 @@ def _models() -> tuple[str, ...]:
     return (chosen,) if chosen else (DEFAULT_MODEL,) + FALLBACK_MODELS
 
 
-def _call(payload: dict) -> tuple[dict, str]:
+def _call(payload: dict, system: str = SYSTEM) -> tuple[dict, str]:
     key = _load_key()
     last: Exception | None = None
     for model in _models():
@@ -82,7 +82,7 @@ def _call(payload: dict) -> tuple[dict, str]:
                 "model": model,
                 "temperature": 0,
                 "response_format": {"type": "json_object"},
-                "messages": [{"role": "system", "content": SYSTEM},
+                "messages": [{"role": "system", "content": system},
                              {"role": "user", "content": json.dumps(payload)}],
             },
             timeout=TIMEOUT_S,

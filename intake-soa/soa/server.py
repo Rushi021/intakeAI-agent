@@ -9,6 +9,7 @@ assignment says not to leave lying around.
 from __future__ import annotations
 
 import tempfile
+import time
 import traceback
 import uuid
 from concurrent.futures import ThreadPoolExecutor
@@ -18,7 +19,7 @@ from fastapi import FastAPI, HTTPException, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import llm
+from . import llm, runs
 from .pipeline import run
 
 WEB = Path(__file__).resolve().parent.parent / "web"
@@ -86,11 +87,28 @@ def remove(doc_id: str):
     return {"removed": doc_id}
 
 
+def _needs_review(result: dict) -> int:
+    """Everything in one extraction that a person still has to look at: a table that nearly scored
+    as an SoA, a footnote block the scorer would not commit to, a marker with no definition or a
+    definition no marker uses, and any fragment the model could not interpret."""
+    review = result["review"]
+    n = len(review["near_miss_tables"]) + review["footnote_blocks"]["review"]
+    if review.get("fallback", {}).get("outcome") not in (None, "recovered"):
+        n += 1                                       # the model fallback ran and did not cleanly recover
+    for s in result["schedules"]:
+        n += len(s["review"]["footnotes_never_used_in_table"])
+        n += len(s["review"]["markers_in_table_without_definition"])
+        n += 1 if s["review"].get("column_axis_warning") else 0
+        n += sum(1 for i in s.get("interpretation", []) if i.get("status") not in ("ok", "skipped"))
+    return n
+
+
 def _extract(doc_id: str, use_model: bool) -> None:
     doc = DOCS.get(doc_id)
     if not doc:
         return                                   # deleted while queued
     doc.update(status="running", step="parsing", message="Starting")
+    t0 = time.perf_counter()
     try:
         def progress(step: str, message: str) -> None:
             if doc_id in DOCS:
@@ -98,10 +116,23 @@ def _extract(doc_id: str, use_model: bool) -> None:
         doc["result"] = run(doc["path"], use_model=use_model, progress=progress)
         doc.update(status="done", step=None,
                    message=f"{len(doc['result']['schedules'])} schedule(s) found")
+        result = doc["result"]
+        runs.log("soa", doc["name"], "done", seconds=round(time.perf_counter() - t0, 1),
+                 produced=len(result["schedules"]), flagged=_needs_review(result),
+                 detail={"model": llm.DEFAULT_MODEL if use_model else None,
+                         "document": result["document"],
+                         "review": result["review"],
+                         "schedules": [{"soa_id": s["soa_id"], "pages": s.get("pages"),
+                                        "fragments": len(s["fragments"]),
+                                        "footnotes": len(s["footnotes"]),
+                                        "review": s["review"]} for s in result["schedules"]]})
     except Exception as exc:
         traceback.print_exc()
         doc.update(status="failed", step=None, message=None,
                    error=f"{type(exc).__name__}: {exc}")
+        runs.log("soa", doc["name"], "failed", seconds=round(time.perf_counter() - t0, 1),
+                 detail={"error": f"{type(exc).__name__}: {exc}",
+                         "traceback": traceback.format_exc()[-4000:]})
 
 
 @app.post("/api/run")
@@ -123,6 +154,13 @@ def result(doc_id: str):
     if doc["status"] != "done":
         raise HTTPException(409, f"status is {doc['status']}")
     return JSONResponse(doc["result"])
+
+
+@app.get("/api/runs")
+def run_log(limit: int = 200, part: str | None = None):
+    """Every run this machine has recorded, newest first. Read-only — the dashboard at
+    /runs.html is a record of what happened, never a way to change it."""
+    return {"runs": runs.recent(limit, part), "totals": runs.totals()}
 
 
 @app.get("/")
