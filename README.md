@@ -78,8 +78,10 @@ after).
 
 **2. Optional: Mistral API key**
 
-Used only for the interpretation layer (header roles, row grouping). The
-pipeline runs fine without it.
+Used for the interpretation layer (header roles, row grouping) and for the
+locator's fallback, which only fires when the structural rules find no table at
+all. The pipeline runs fine without a key — labels fall back to rules, and a
+document the rules cannot locate is reported as a miss rather than recovered.
 
 ```bash
 export MISTRAL_API_KEY=...

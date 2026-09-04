@@ -356,8 +356,21 @@ header-row walk, superscript detection requiring both size and baseline raise,
 and the corpus check — every protocol locates exactly one schedule, on the
 expected pages, with page-split tables merged rather than fragmented.
 
-Nothing in the extraction pipeline was changed in this pass. What was added is
+Nothing in the extraction pipeline was changed in this pass; what was added is
 the run log below.
+
+**Added after this pass:** a model fallback for the locator
+(`intake-soa/soa/fallback.py`). The rules gate hard on an ordered timepoint
+axis, so an unseen template can score zero and return no schedule at all. When —
+and only when — the rules select nothing, the model is shown a menu of every
+table (caption, header rows, first-column labels, shape; **no body cell values**)
+and asked which is the schedule; the pick is validated against the real table
+ids and re-enters the deterministic pipeline unchanged. It is strictly additive:
+with no key it is a no-op and the committed `outputs/*-soa.json` are unchanged.
+With every heuristic selection wiped, it recovers the same table the rules pick
+on all five protocols. A sibling check flags a schedule whose column axis comes
+back narrower than rule 3 requires — protocol12's collapse is no longer silent.
+Details in [`intake-soa/ARCHITECTURE.md`](intake-soa/ARCHITECTURE.md).
 
 ---
 
@@ -477,3 +490,48 @@ The run without an API key is worth doing once: every question that would have
 gone to the model reaches the gate instead, with the reason on the card. That is
 the escalation path under its worst conditions, and it is the one a reviewer with
 no key will see.
+
+---
+
+## 11. GenAI use — in the product, and in building it
+
+Two different things, deliberately kept apart.
+
+### In the product, at runtime: Mistral, and nothing else
+
+`https://api.mistral.ai/v1/chat/completions` is the **only** GenAI endpoint
+either half of this submission calls — `intake-agent/src/llm.ts` for Part 1,
+`intake-soa/soa/llm.py` for Part 2. No Anthropic SDK, no OpenAI SDK, no
+LangChain: `grep -ri anthropic` across `src/`, `soa/`, `package.json` and
+`requirements.txt` returns nothing. Model `mistral-large-latest`, walking
+`medium → small` when a key's tier answers 403. One key covers both parts.
+Setup is in the [root README](README.md); what each call is allowed to decide
+is defended in the two `ARCHITECTURE.md` files. Both parts run without a key —
+Part 1 sends every model question to the human gate, Part 2 falls back to its
+rule-based labels and loses the locator's recovery path.
+
+### In building it: Claude Code (Anthropic), as a development tool
+
+It is not a dependency, is never invoked by the deliverable, and needs no key to
+run anything in this repo. How the work was structured around it:
+
+| Phase | How it was used |
+|---|---|
+| Architecting | A written standard first — `AGENT.md` repo-wide, a `CLAUDE.md` per part — so the direction and the disqualifying failures never had to be re-explained. Each part's `ARCHITECTURE.md` is the project's memory: any session that settles a design decision records it and its rationale in the same session, so it does not get re-litigated in the next one. |
+| Planning | Non-trivial changes were planned before any code: read the existing code, write the plan to a file, settle the open questions, then build. The Part 2 fallback loop went this way — scope, the no-cell-values data boundary, and the column-collapse approach were all decided in review before a line was written. |
+| Implementation | Mechanical lifting, and reading measured data rather than reasoning about what things "should" look like — the locator's rule 1 and rule 3 thresholds both came from dumping every table's statistics across the corpus and reading where the separation actually fell. |
+| Testing | `TEST-PLAN.md` → this report; the bench harness (`probe`/`lane`/`matrix`/`gate`); and for the fallback, fault-injection (wipe every heuristic selection and check it recovers the same table) plus an adversarial suite of malformed model replies. |
+| Review | A standing pass for over-engineering, applied rather than filed — §8 is its output, and the fallback loop got the same treatment (an unused parameter and two accumulator loops cut). |
+
+**Where it got in the way**, stated because it is the useful half: its first
+instinct on almost every rule was to pattern-match strings it had just read in
+one sample — sponsor names, legend headers, the literal phrase "Schedule of
+Activities", a fixture's button label — which is precisely the overfit both
+briefs disqualify. It stays out only through an explicit written standard and
+repeated correction. The most recent instance is worth naming: asked to flag
+Part 2's collapsed column axis, it proposed testing `value_cols <= 1`, a
+threshold that matched the one corpus document exhibiting the bug and would have
+silently missed a parse that merged twenty visit columns into three. The review
+pass caught it and re-derived the test from the locator's own definition of a
+schedule's grid. A generated rule that passes on the corpus is not the same as a
+correct one, and the corpus cannot tell you which you have.
